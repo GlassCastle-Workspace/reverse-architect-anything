@@ -31,6 +31,7 @@ import {
 import { z } from "zod";
 import { evidenceInputSchema } from "./evidenceInputContracts.js";
 import { architectureProjectionSchema } from "../domain/architecture/architectureProjectionSchema.js";
+import { architectureFederationSchema } from "../domain/architecture/architectureFederationSchema.js";
 import type { ToolContract } from "./toolContractTypes.js";
 import { toolContractMetadata } from "./toolEffects.js";
 import { evidenceResultOf } from "./toolOutputSchemaPrimitives.js";
@@ -51,6 +52,22 @@ import {
 export const reverseArchitectureProjectionRequestSchema = z.strictObject({
   application: evidenceInputSchema,
 });
+
+/** Exact inline Evidence or session-scoped references to distinct RAA projections. */
+export const reverseArchitectureFederationRequestSchema = z
+  .strictObject({
+    projections: z.array(evidenceInputSchema).min(2).max(6),
+  })
+  .superRefine((input, context) => {
+    const ids = input.projections.map((source) => source.evidence_id);
+    if (new Set(ids).size !== ids.length) {
+      context.addIssue({
+        code: "custom",
+        path: ["projections"],
+        message: "Federation source Evidence IDs must be distinct",
+      });
+    }
+  });
 
 const traceOutputSchema = evidenceResultOf(applicationFeatureTraceResultSchema);
 const semanticTraceOutputSchema = evidenceResultOf(
@@ -349,6 +366,27 @@ export const APPLICATION_TOOL_CONTRACTS = [
       },
     ],
   },
+  {
+    name: "federate_reverse_architecture",
+    ...toolContractMetadata("federate_reverse_architecture"),
+    description:
+      "Federate 2-6 content-identified RAA architectural projections into source-scoped component, relationship and hypothesis inventories. Preserves coverage and unresolved findings; marks identical SHA-256 bytes without merging logical entities. Accepts complete inline Evidence or exact same-session retained references. No target execution or cross-source name-based guessing.",
+    kind: "application",
+    inputSchema: reverseArchitectureFederationRequestSchema,
+    outputSchema: evidenceResultOf(architectureFederationSchema),
+    examples: [
+      {
+        title:
+          "Federate two previously retained RAA projection Evidence records (replace IDs)",
+        input: {
+          projections: [
+            retained(`ev_${HASH}`),
+            retained(`ev_${"1".repeat(64)}`),
+          ],
+        },
+      },
+    ],
+  },
 ] as const satisfies readonly ToolContract[];
 
 /** Resolve one named application contract without relying on array position. */
@@ -385,6 +423,9 @@ export function applicationToolContract(
 export function applicationToolContract(
   name: "project_reverse_architecture",
 ): (typeof APPLICATION_TOOL_CONTRACTS)[10];
+export function applicationToolContract(
+  name: "federate_reverse_architecture",
+): (typeof APPLICATION_TOOL_CONTRACTS)[11];
 export function applicationToolContract(
   name: (typeof APPLICATION_TOOL_CONTRACTS)[number]["name"],
 ): (typeof APPLICATION_TOOL_CONTRACTS)[number] {

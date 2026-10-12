@@ -76,6 +76,34 @@ tests (9/9 combined), 34/34 existing application CLI acceptance tests,
 full local CI static gates, documentation checks and
 local CLI analysis -> projection Evidence smoke test.
 
-**Known limitations:** process/trust boundaries are only _candidates_; the
-first projection requires authenticated application Evidence and does not
-yet emit C4, state machines, ADRs or cross-provider reconciliations.
+## Phase 3: bounded multi-source federation (2026-10-12)
+
+Implemented `federate-reverse-architecture` (CLI) and
+`federate_reverse_architecture` (MCP) for two to six complete
+RAA-projection Evidence records. The projection now carries its validated
+source family, root artifact digest, and original scoped node identities.
+Federation does not coalesce nodes by name, path, or structural similarity;
+it returns source-local edges, hypotheses, unknowns and original coverage.
+
+It reports equal **supplied** SHA-256 digests only for content-exact nodes
+or the source-root artifact. This is a digest comparison, **not independent
+rehashing** or proof of shared logical architecture. No cross-source
+runtime/trust relationships are fabricated. Resource limits are explicit.
+
+**Validation:** 5/5 federation domain tests, 3/3 federation Evidence service
+tests, 3/3 federation MCP boundary tests, 1/1 public CLI acceptance test
+(order independence and duplicate rejection), retained Evidence session
+isolation, 34/34 legacy application CLI acceptance tests, and full local CI
+static gates. A real CLI analysis of two overlapping
+JavaScript source directories yielded 42 components, 60 relationships,
+3 shared reported content digests and no identical root digest; it created
+no unjustified cross-source edges.
+
+**Known limitations:** full raw native-investigation graphs, mobile graph
+inventories and network-capture/packet evidence still require typed adapters.
+Even when input source kinds include static JavaScript, runtime-reconciled
+JavaScript and managed application projections, no cross-source identity
+merge is authorized by this slice. Process/trust boundaries remain hypotheses.
+C4 exports, state machines and architecture decision records are unimplemented.
+Publication, provider-level integration tests and the full repository-wide
+test suite remain separate release gates.

@@ -15,11 +15,19 @@ import {
 } from "./architectureProjection.js";
 
 const SOURCE_EVIDENCE_ID = `ev_${"f".repeat(64)}`;
+const SOURCE = {
+  kind: "static-application" as const,
+  rootArtifactSha256: APPLICATION_GRAPH_DIGESTS.package,
+};
 
 describe("Reverse Architecting projection", () => {
   it("deterministically classifies evidence-backed components and retains original identities", () => {
     const graph = buildSyntheticJavaScriptApplicationGraph();
-    const report = projectJavaScriptArchitecture(graph, SOURCE_EVIDENCE_ID);
+    const report = projectJavaScriptArchitecture(
+      graph,
+      SOURCE_EVIDENCE_ID,
+      SOURCE,
+    );
     expect(report.schema).toBe("ReverseArchitectureProjection");
     expect(report.source_graph_id).toBe(graph.graph_id);
     expect(report.source_evidence_id).toBe(SOURCE_EVIDENCE_ID);
@@ -28,9 +36,16 @@ describe("Reverse Architecting projection", () => {
     expect(new Set(report.components.map((node) => node.component_id))).toEqual(
       new Set(graph.nodes.map((node) => node.node_id)),
     );
-    expect(projectJavaScriptArchitecture(graph, SOURCE_EVIDENCE_ID)).toEqual(
-      report,
-    );
+    expect(
+      projectJavaScriptArchitecture(graph, SOURCE_EVIDENCE_ID, SOURCE),
+    ).toEqual(report);
+    for (const node of graph.nodes) {
+      expect(
+        report.components.find(
+          (component) => component.component_id === node.node_id,
+        )?.identity,
+      ).toEqual(node.identity);
+    }
     expect(
       report.components.every(
         (node) => node.category_basis === "source-node-kind",
@@ -42,6 +57,7 @@ describe("Reverse Architecting projection", () => {
     const report = projectJavaScriptArchitecture(
       buildSyntheticJavaScriptApplicationGraph(),
       SOURCE_EVIDENCE_ID,
+      SOURCE,
     );
     const byId = new Map(
       report.components.map((component) => [component.component_id, component]),
@@ -68,7 +84,11 @@ describe("Reverse Architecting projection", () => {
         artifactEvidence(APPLICATION_GRAPH_DIGESTS.asar, "src/index.js"),
       ),
     );
-    const report = projectJavaScriptArchitecture(graph, SOURCE_EVIDENCE_ID);
+    const report = projectJavaScriptArchitecture(
+      graph,
+      SOURCE_EVIDENCE_ID,
+      SOURCE,
+    );
     expect(report.boundary_candidates).toEqual([]);
     expect(report.summary.relationships).toBe(0);
   });
@@ -106,7 +126,11 @@ describe("Reverse Architecting projection", () => {
       ],
     });
     const graph = graphForNode(node);
-    const report = projectJavaScriptArchitecture(graph, SOURCE_EVIDENCE_ID);
+    const report = projectJavaScriptArchitecture(
+      graph,
+      SOURCE_EVIDENCE_ID,
+      SOURCE,
+    );
     expect(report.unresolved).toEqual([
       {
         component_id: node.node_id,

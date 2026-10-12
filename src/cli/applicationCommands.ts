@@ -1,5 +1,6 @@
 import { reconstructionCoverageEvaluationInputSchema } from "../domain/reconstructionCoverageInput.js";
 import { reverseArchitectureProjectionInputSchema } from "../domain/architecture/architectureProjectionInput.js";
+import { reverseArchitectureFederationInputSchema } from "../domain/architecture/architectureFederationInput.js";
 import { Cli, z } from "incur";
 
 import { CLI_COMMANDS } from "../cliCommandNames.js";
@@ -27,6 +28,19 @@ export const registerApplicationCommands = (
   cli: ReturnType<typeof Cli.create>,
   logger: Logger,
 ): void => {
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.federateReverseArchitecture,
+    description:
+      "Federate RAA architectural Evidence without merging unrelated source identities",
+    inputSchema: reverseArchitectureFederationInputSchema,
+    workflow: async (input) => {
+      const { federateReverseArchitectureEvidenceValidated } =
+        await import("../application/architecture/ArchitectureFederationService.js");
+      return federateReverseArchitectureEvidenceValidated(input);
+    },
+  });
   registerJsonCommand({
     cli,
     logger,

@@ -1,11 +1,14 @@
 import { z } from "zod";
 
-import { prefixedDigestSchema } from "../digests.js";
+import { digestSchema, prefixedDigestSchema } from "../digests.js";
 import {
   JAVASCRIPT_APPLICATION_NODE_KINDS,
   JAVASCRIPT_APPLICATION_RELATIONS,
 } from "../javascript/javascriptApplicationGraphSchemas.js";
-import { applicationCoverageSchema } from "../javascript/javascriptApplicationEvidenceSchemas.js";
+import {
+  applicationCoverageSchema,
+  applicationNodeIdentitySchema,
+} from "../javascript/javascriptApplicationEvidenceSchemas.js";
 import type { ArchitectureProjection } from "./architectureProjection.js";
 
 const factState = z.enum(["observed", "inferred", "unknown", "unavailable"]);
@@ -26,6 +29,7 @@ const observation = z.strictObject({
 const component = z.strictObject({
   component_id: graphNodeId,
   original_kind: z.enum(JAVASCRIPT_APPLICATION_NODE_KINDS),
+  identity: applicationNodeIdentitySchema,
   category: z.enum([
     "distribution",
     "artifact",
@@ -88,6 +92,12 @@ export const architectureProjectionSchema = z.strictObject({
   schema: z.literal("ReverseArchitectureProjection"),
   version: z.literal(1),
   source_graph_id: prefixedDigestSchema("jag"),
+  source_kind: z.enum([
+    "static-application",
+    "static-runtime-reconciliation",
+    "managed-application",
+  ]),
+  source_root_artifact_sha256: digestSchema,
   source_evidence_id: prefixedDigestSchema("ev"),
   components: z.array(component),
   relationships: z.array(relationship),

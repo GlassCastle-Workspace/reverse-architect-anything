@@ -37,6 +37,8 @@ export interface ArchitectureComponent {
   /** Original graph identity: never merge entities by similar display names. */
   readonly component_id: string;
   readonly original_kind: ApplicationNode["kind"];
+  /** Original scoped identity, never inferred from a display label. */
+  readonly identity: ApplicationNode["identity"];
   /** This category is DERIVED from the original node kind, not observed. */
   readonly category: ArchitectureCategory;
   readonly category_basis: "source-node-kind";
@@ -77,10 +79,24 @@ export interface ArchitectureUnresolved {
   readonly limitations: readonly string[];
 }
 
+export type ArchitectureSourceKind =
+  | "static-application"
+  | "static-runtime-reconciliation"
+  | "managed-application";
+
+export interface ArchitectureSourceDescriptor {
+  readonly kind: ArchitectureSourceKind;
+  readonly rootArtifactSha256: string;
+}
+
 export interface ArchitectureProjection {
   readonly schema: "ReverseArchitectureProjection";
   readonly version: 1;
   readonly source_graph_id: string;
+  /** Discriminated source family: from the existing validated Evidence adapter. */
+  readonly source_kind: ArchitectureSourceKind;
+  /** Root artifact digest, never inferred from a display filename. */
+  readonly source_root_artifact_sha256: string;
   /** Authenticated outer Evidence record; graph-local evidence may be empty. */
   readonly source_evidence_id: string;
   readonly components: readonly ArchitectureComponent[];
@@ -185,11 +201,13 @@ const verificationQuestion = (
 export const projectJavaScriptArchitecture = (
   graph: JavaScriptApplicationGraph,
   sourceEvidenceId: string,
+  source: ArchitectureSourceDescriptor,
 ): ArchitectureProjection => {
   const components = graph.nodes
     .map((node): ArchitectureComponent => ({
       component_id: node.node_id,
       original_kind: node.kind,
+      identity: node.identity,
       category: classifyArchitectureNode(node.kind),
       category_basis: "source-node-kind",
       identity_stability: node.identity.stability,
@@ -281,6 +299,8 @@ export const projectJavaScriptArchitecture = (
     schema: "ReverseArchitectureProjection",
     version: 1,
     source_graph_id: graph.graph_id,
+    source_kind: source.kind,
+    source_root_artifact_sha256: source.rootArtifactSha256,
     source_evidence_id: sourceEvidenceId,
     components,
     relationships,

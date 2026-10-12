@@ -132,10 +132,75 @@ On the upstream `scripts/fixtures/javascript-recovery/code-split` fixture:
 - This is **not** a native-provider, externally deployed MCP, or full-repository
   regression verification claim.
 
+## Evidence federation: implemented bounded slice
+
+`federate_reverse_architecture` (MCP) and
+`federate-reverse-architecture` (CLI) accept **two to six distinct RAA
+architectural Evidence records**. The upstream producer must first be
+`project_reverse_architecture`; arbitrary reports cannot be silently
+promoted to architecture.
+
+- **Sources:** retains each projection Evidence ID, original graph Evidence
+  ID, graph ID, root artifact digest, source kind, limitations, and coverage.
+- **Entities:** namespaces every component by its projection Evidence and
+  original node ID. Identically named entities are **never merged**.
+- **Relationships and hypotheses:** preserves only validated source-local edges
+  and boundary candidates with their source-scoped identifiers.
+- **Cross-source correspondences:** reports equal _provided_ SHA-256 digests for
+  root artifacts and exact content-digest nodes. These are **reported digest
+  matches**, not independent byte rereads, proof of the same logical entity, or
+  authorization for cross-source architectural links.
+- **Unknowns and coverage:** retain source-specific incomplete/unknown findings;
+  `complete-within-sources` means only that each contributing graph reported
+  complete coverage within its own scope.
+- **Limits:** at most six source projections, 20,000 components and 50,000
+  relationships per federation; larger requests fail before federation work.
+- **Integrity:** validate each complete RAA Evidence envelope, provider/operation
+  contract, content-addressed ID, normalized projection schema, and its
+  source Evidence link. A semantic digest detects inconsistent record contents;
+  **it is not a digital signature of independent producer authenticity**.
+
+Example with already produced RAA Evidence files:
+
+```sh
+node -e 'const fs=require("node:fs"); const a=JSON.parse(fs.readFileSync("architecture-a.json"));const b=JSON.parse(fs.readFileSync("architecture-b.json"));fs.writeFileSync("federation-request.json",JSON.stringify({projections:[a,b]}));'
+node scripts/rea.mjs federate-reverse-architecture federation-request.json --format json > federation-evidence.json
+```
+
+MCP also accepts current-session references of the form
+`{"projections":[{"kind":"retained-evidence","evidence_id":"ev_<sha256-A>"},{"kind":"retained-evidence","evidence_id":"ev_<sha256-B>"}]}`.
+Only Evidence already held by that MCP session can be resolved.
+
+### Measured two-artifact CLI smoke test (2026-10-12)
+
+Two actual REA JavaScript analyses of
+`scripts/fixtures/javascript-recovery/code-split` and its enclosing
+`scripts/fixtures/javascript-recovery` directory produced separate Evidence
+records. Their RAA projections federated successfully:
+
+| Measurement                            | Observed |
+| -------------------------------------- | -------: |
+| Separate source projections            |        2 |
+| Components retained without coalescing |       42 |
+| Source relationships retained          |       60 |
+| Boundary hypotheses created            |        0 |
+| Shared **reported content digests**    |        3 |
+| Matching root-artifact digests         |        0 |
+| Source-scoped unresolved components    |        0 |
+
+The three digest matches correspond to content seen in both analysis scopes.
+They **do not** establish identical application identity, runtime execution,
+trust relationships, or architectural intent. The federation output was
+content-addressed and linked to both RAA projection Evidence IDs.
+A compiled CLI acceptance test also verifies the same derived Evidence ID
+when source order is reversed, plus duplicate-source rejection.
+
 ## Next architectural capabilities (planned)
 
-1. **Evidence federation:** align native, managed, JavaScript, browser,
-   network, mobile, and runtime graphs with non-destructive entity resolution.
+1. **Heterogeneous evidence adapters:** extend the implemented projection
+   federation to native-investigation, browser/network-capture, mobile and other
+   format-specific graphs. An adapter must authenticate and interpret its native
+   source schema before its architectural claims may join the federation.
 2. **Architectural contracts:** endpoints, data schemas, call shapes,
    invariants, side effects and dependency direction with coverage.
 3. **State and temporal systems:** state transitions, event flows, concurrency,

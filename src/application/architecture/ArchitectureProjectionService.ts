@@ -47,6 +47,10 @@ export const projectReverseArchitectureEvidenceValidated = (
   const projection = projectJavaScriptArchitecture(
     source.value.graph,
     sourceEvidence.evidence_id,
+    {
+      kind: source.value.kind,
+      rootArtifactSha256: source.value.rootArtifactSha256,
+    },
   );
 
   return ok(

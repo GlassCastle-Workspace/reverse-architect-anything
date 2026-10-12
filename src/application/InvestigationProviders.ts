@@ -109,6 +109,13 @@ export const RAA_ARCHITECTURE_PROVIDER = Object.freeze({
   version: "1",
 } as const);
 
+/** Identity for the bounded, evidence-linked architecture federation producer. */
+export const RAA_FEDERATION_PROVIDER = Object.freeze({
+  id: "raa-architecture-federation",
+  name: "RAA architecture federation",
+  version: "1",
+} as const);
+
 /** Provider identity for graph-native feature tracing and version comparison. */
 export const JAVASCRIPT_APPLICATION_WORKFLOW_PROVIDER = {
   id: "rea-javascript-application-workflows",

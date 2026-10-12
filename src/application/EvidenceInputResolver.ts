@@ -34,6 +34,20 @@ export const resolveEvidenceInput = (
   return ok(record);
 };
 
+/** Resolve each source by its exact current-session identity, without fallback. */
+export const resolveEvidenceInputs = (
+  inputs: readonly EvidenceInput[],
+  lookup: EvidenceLookup | undefined,
+): Result<Evidence[], EvidenceReferenceError> => {
+  const resolved: Evidence[] = [];
+  for (const source of inputs) {
+    const result = resolveEvidenceInput(source, lookup);
+    if (!result.ok) return result;
+    resolved.push(result.value);
+  }
+  return ok(resolved);
+};
+
 /** Resolve an application's Evidence before its existing semantic validation. */
 export const resolveApplicationEvidenceRequest = <
   T extends { readonly application: EvidenceInput },
