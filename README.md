@@ -1,3 +1,12 @@
+> **RAA — Reverse Architect Anything (development fork)**
+> This repository is a fork of `morluto/rea`, evolving evidence-based reverse engineering toward reconstructing components, boundaries, responsibilities, contracts and architecture hypotheses. The original REA implementation remains credited and available under its MIT license. RAA is independent and is not an upstream REA release.
+>
+> **Working addition:** `project-reverse-architecture` consumes an authenticated REA application Evidence JSON wrapper and produces an evidence-linked architectural model. See `docs/reverse-architecting.md` and `docs/reverse-architecting-migration.md`. The CLI executable, npm package name, existing workflows and most documentation still use REA names until compatibility migration is verified. **Do not install the published `rea-agents` package expecting RAA features.**
+>
+> **Status:** experimental fork in active migration; no RAA npm release or validated new MCP tool yet.
+
+---
+
 <div align="center">
 
 **English** · [简体中文](README_zh.md) · [繁體中文](README_zh-TW.md) · [日本語](README_ja.md) · [한국어](README_ko.md) · [Türkçe](README_tr.md) · [Русский](README_ru.md) · [Tiếng Việt](README_vi.md) · [ไทย](README_th.md) · [Deutsch](README_de.md) · [Español](README_es.md) · [Français](README_fr.md) · [Українська](README_uk.md) · [Polski](README_pl.md) · [Português (Brasil)](README_pt-BR.md) · [العربية](README_ar.md) · [فارسی](README_fa.md) · [Bahasa Indonesia](README_id.md) · [Italiano](README_it.md)

@@ -1,4 +1,5 @@
 import { reconstructionCoverageEvaluationInputSchema } from "../domain/reconstructionCoverageInput.js";
+import { reverseArchitectureProjectionInputSchema } from "../domain/architecture/architectureProjectionInput.js";
 import { Cli, z } from "incur";
 
 import { CLI_COMMANDS } from "../cliCommandNames.js";
@@ -26,6 +27,22 @@ export const registerApplicationCommands = (
   cli: ReturnType<typeof Cli.create>,
   logger: Logger,
 ): void => {
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.projectReverseArchitecture,
+    description:
+      "Project authenticated application Evidence into an evidence-linked reverse architecture model",
+    inputSchema: reverseArchitectureProjectionInputSchema,
+    workflow: async (input) => {
+      const { projectReverseArchitectureEvidenceValidated } =
+        await import("../application/architecture/ArchitectureProjectionService.js");
+      const result = projectReverseArchitectureEvidenceValidated(input);
+      return result.ok
+        ? { ok: true, value: jsonValueSchema.parse(result.value) }
+        : result;
+    },
+  });
   registerJsonCommand({
     cli,
     logger,

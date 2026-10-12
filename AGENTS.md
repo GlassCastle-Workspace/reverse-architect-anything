@@ -1,3 +1,17 @@
+# Reverse Architect Anything — Fork Directives
+
+The fork is converting REA to evidence-based _reverse architecture_, not replacing its legitimate reverse-engineering providers. Preserve upstream authorship, third-party notices, history, licenses and working CLI/MCP behavior.
+
+Apply the file-by-file migration procedure in [docs/reverse-architecting-migration.md](docs/reverse-architecting-migration.md). A status changes only after a real file-specific assessment and verification; automated inventory is not review.
+
+Architecture claims MUST distinguish observed facts, deterministic derived classifications, inferred responsibilities, candidate hypotheses, and unknown/unavailable evidence. Preserve graph-level provenance, original source identity, coverage, negative findings' scope, and contradictory evidence. Do not label an inferred process/trust boundary as established. An architectural hypothesis must include a concrete verification question or disconfirming test.
+
+Place pure architecture semantics under `src/domain/architecture/`, orchestration and caller Evidence authentication under `src/application/architecture/`, and transport-facing adapters under their existing CLI/MCP owners. Do not put engine protocols in pure domain code. New or modified analysis must not bypass existing human gates for target execution, injection, mutation or elevated access.
+
+The upstream guidelines below remain applicable except for the fork's explicitly different product mission.
+
+---
+
 # Repository Guidelines
 
 ## Product and Authority
