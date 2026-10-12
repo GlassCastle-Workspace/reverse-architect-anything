@@ -1,5 +1,6 @@
 import type { EvidenceMcpServer } from "./EvidenceMcpServer.js";
 
+import { registerProjectReverseArchitectureTool } from "./registerApplicationTools/projectReverseArchitecture.js";
 import { registerTraceFeatureTool } from "./registerApplicationTools/traceFeature.js";
 import { registerTraceJavaScriptSemanticsTool } from "./registerApplicationTools/traceSemantics.js";
 import { registerCompareApplicationVersionsTool } from "./registerApplicationTools/compareVersions.js";
@@ -15,6 +16,7 @@ export const registerApplicationTools = (
   server: EvidenceMcpServer,
   options: ApplicationToolRegistration,
 ): void => {
+  registerProjectReverseArchitectureTool(server, options);
   registerTraceFeatureTool(server, options);
   registerTraceJavaScriptSemanticsTool(server, options);
   registerCompareApplicationVersionsTool(server, options);

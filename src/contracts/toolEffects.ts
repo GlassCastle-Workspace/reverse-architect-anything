@@ -561,6 +561,7 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
     launchesProcess: true,
     idempotent: false,
   }),
+  project_reverse_architecture: evidence,
   trace_application_feature: evidence,
   trace_javascript_semantics: evidence,
   compare_application_versions: evidence,

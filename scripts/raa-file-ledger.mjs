@@ -116,6 +116,40 @@ if (command === "init") {
       `Initialized ${rows.length} file-level decisions against ${BASE}`,
     );
   }
+} else if (command === "sync") {
+  const rows = load();
+  const sourceEntries = originalEntries();
+  const indexed = new Map(rows.map((row) => [row.path, row]));
+  const invalidSourceEntries = sourceEntries.filter(
+    (entry) => indexed.get(entry.path)?.base_sha !== entry.base_sha,
+  );
+  if (invalidSourceEntries.length > 0) {
+    console.error(
+      "Source commit inventory mismatch. Refusing to rewrite source history.",
+      invalidSourceEntries.map((entry) => entry.path),
+    );
+    process.exitCode = 1;
+  } else {
+    let added = 0;
+    for (const path of worktreePaths()) {
+      if (indexed.has(path)) continue;
+      const row = {
+        path,
+        base_sha: null,
+        kind: "new",
+        phase: phase(path),
+        status: "pending",
+        note: "",
+      };
+      rows.push(row);
+      indexed.set(path, row);
+      added++;
+    }
+    if (added > 0) save(rows);
+    console.log(
+      `Recorded ${added} new fork files; retained all existing file decisions.`,
+    );
+  }
 } else if (command === "mark") {
   const path = process.argv[3];
   const status = process.argv[4];

@@ -37,13 +37,17 @@ larger than one text substitution.
 ## Ledger commands
 
 ```sh
+node scripts/raa-file-ledger.mjs sync
 node scripts/raa-file-ledger.mjs summary
 node scripts/raa-file-ledger.mjs next
 node scripts/raa-file-ledger.mjs check
 node scripts/raa-file-ledger.mjs mark src/domain/evidence.ts reviewed-retained "Existing authenticated Evidence semantics preserved."
 ```
 
-`init` is a **one-time**, refusal-on-overwrite operation. The ledger records
+`init` is a **one-time**, refusal-on-overwrite operation. `sync` safely
+registers newly added fork files without changing any source identities or
+existing review decisions; run it before marking newly authored files.
+The ledger records
 the upstream blob SHA for every original file and separate rows for fork-added
 files. `pending` never implies architectural deficiency: it means nobody has
 completed a file-specific review yet. Submodule gitlinks remain external
@@ -57,14 +61,20 @@ or test, not simply say "done."
 
 ## Scope of initial iteration
 
-Implemented: pure architecture projection, application Evidence validation,
-CLI command, five semantic tests, and architectural documentation. Existing
-provider behavior, REA names, MCP command registry and cross-provider
-reconciliation remain **pending**; none should be represented as migrated.
+Implemented: pure architecture projection, authenticated application Evidence
+validation, cryptographically identified derived projection Evidence, the local
+CLI command and the native MCP operation (including same-session retained
+Evidence), five domain tests, three application service tests, three MCP
+boundary tests, and architectural documentation. The acquisition providers and existing REA identity are
+intentionally preserved. Cross-provider architectural reconciliation,
+production MCP deployment, and package rebranding remain **pending**.
 
 **Validation performed:** upstream JavaScript graph 19/19 regression tests,
-new projection 5/5 tests, TypeScript typecheck, fast typecheck/lint and
-local CLI analysis -> projection smoke test.
+new projection 5/5 domain tests, 3/3 application service tests, three MCP
+boundary tests including schema and session isolation, the upstream MCP parity
+tests (9/9 combined), 34/34 existing application CLI acceptance tests,
+full local CI static gates, documentation checks and
+local CLI analysis -> projection Evidence smoke test.
 
 **Known limitations:** process/trust boundaries are only _candidates_; the
 first projection requires authenticated application Evidence and does not

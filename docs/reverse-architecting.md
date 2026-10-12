@@ -67,7 +67,7 @@ and orchestration <- CLI/MCP adapters. The acquisition adapters MUST NOT be
 rewritten to infer decisions directly. New architecture logic should prefer
 shared domain contracts, never parallel ad-hoc parsers.
 
-## First implemented vertical slice
+## Implemented foundation: domain, CLI, and MCP
 
 The initial domain projection is
 `src/domain/architecture/architectureProjection.ts`.
@@ -87,6 +87,13 @@ graph identity, source node IDs, edge IDs, evidence states and limitations.
   coverage and limitations are passed through without promotion.
 - **Validation:** `ArchitectureProjectionService` authenticates the caller's
   REA Evidence using the existing application graph validation boundary.
+- **Provenance:** the CLI and MCP return a derived Evidence envelope containing
+  the projection as `normalized_result`. Its `evidence_links` points to the
+  exact authenticated source Evidence ID; the envelope is marked
+  `analyst-inference`, never `observed`.
+- **MCP:** `project_reverse_architecture` accepts inline Evidence or a typed
+  `retained-evidence` reference scoped to the current session. It reuses
+  REA's admission, ledger and error handling; it does not start providers.
 
 ### Local CLI usage (this fork, not the published REA package)
 
@@ -94,8 +101,17 @@ graph identity, source node IDs, edge IDs, evidence states and limitations.
 # Requires Node.js 24 and project dependencies (npm ci).
 node scripts/rea.mjs analyze-javascript-application /path/to/unpacked-app --format json > evidence.json
 node -e 'const fs=require("node:fs");const evidence=JSON.parse(fs.readFileSync("evidence.json"));fs.writeFileSync("request.json",JSON.stringify({application:evidence}));'
-node scripts/rea.mjs project-reverse-architecture request.json --format json > architecture.json
+node scripts/rea.mjs project-reverse-architecture request.json --format json > architecture-evidence.json
+node -e 'const e=require("./architecture-evidence.json"); console.log(e.normalized_result.summary, e.evidence_links)'
 ```
+
+The MCP operation `project_reverse_architecture` accepts the same complete
+`application` Evidence JSON or an exact retained reference
+`{"application":{"kind":"retained-evidence","evidence_id":"ev_<64-hex>"}}`.
+The caller must already have retained that Evidence in its current MCP session.
+The command returns an **Evidence envelope**, not an unwrapped graph.
+The source Evidence and derived architectural result are recorded in the same
+session with deterministic IDs, making exact replays idempotent.
 
 The executable remains `rea` during compatibility migration. It has **not**
 been renamed or published under an RAA package identity.
@@ -108,10 +124,13 @@ On the upstream `scripts/fixtures/javascript-recovery/code-split` fixture:
 - The new CLI projection exited successfully with 11 components,
   17 relationships, zero eligible boundary candidates, and complete source
   graph coverage. The zero result is intentional, not a missing fallback.
-- Five dedicated domain tests passed, alongside TypeScript typecheck and
-  an instrumented local CLI build.
-- This is **not** a native-provider, remote MCP, security, or full-regression
-  verification claim.
+- Five dedicated domain tests, three service-level tests and three MCP
+  boundary tests passed, alongside TypeScript typecheck, lint, full local
+  CI static gates, documentation validation and the local CLI build.
+- The MCP boundary tests check JSON Schema, Evidence linkage, inline and
+  retained equivalence, invalid/tampered inputs and session isolation.
+- This is **not** a native-provider, externally deployed MCP, or full-repository
+  regression verification claim.
 
 ## Next architectural capabilities (planned)
 

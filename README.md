@@ -3,7 +3,7 @@
 >
 > **Working addition:** `project-reverse-architecture` consumes an authenticated REA application Evidence JSON wrapper and produces an evidence-linked architectural model. See `docs/reverse-architecting.md` and `docs/reverse-architecting-migration.md`. The CLI executable, npm package name, existing workflows and most documentation still use REA names until compatibility migration is verified. **Do not install the published `rea-agents` package expecting RAA features.**
 >
-> **Status:** experimental fork in active migration; no RAA npm release or validated new MCP tool yet.
+> **Status:** experimental fork in active migration. The local CLI and MCP `project_reverse_architecture` capability are tested; there is no RAA npm release yet.
 
 ---
 

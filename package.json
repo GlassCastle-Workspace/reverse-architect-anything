@@ -92,6 +92,7 @@
     "licenses"
   ],
   "scripts": {
+    "raa:ledger": "node scripts/raa-file-ledger.mjs",
     "release:notes": "node scripts/release-notes.mjs",
     "deps:check": "node scripts/check-dependency-install.mjs",
     "metadata:generate": "node scripts/run-exclusive.mjs artifacts node scripts/generate-package-metadata.mjs",

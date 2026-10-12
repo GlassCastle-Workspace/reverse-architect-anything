@@ -102,6 +102,13 @@ export const ANALYSIS_VIEW_PROVIDER = {
   version: "1",
 } as const;
 
+/** Identity for evidence-linked architecture interpretation. */
+export const RAA_ARCHITECTURE_PROVIDER = Object.freeze({
+  id: "raa-architecture-workflows",
+  name: "RAA architectural projection",
+  version: "1",
+} as const);
+
 /** Provider identity for graph-native feature tracing and version comparison. */
 export const JAVASCRIPT_APPLICATION_WORKFLOW_PROVIDER = {
   id: "rea-javascript-application-workflows",

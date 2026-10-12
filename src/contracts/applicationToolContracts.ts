@@ -28,6 +28,9 @@ import {
   harmonyApplicationProjectionInputSchema,
   harmonyApplicationProjectionResultSchema,
 } from "../domain/harmony/harmonyApplication.js";
+import { z } from "zod";
+import { evidenceInputSchema } from "./evidenceInputContracts.js";
+import { architectureProjectionSchema } from "../domain/architecture/architectureProjectionSchema.js";
 import type { ToolContract } from "./toolContractTypes.js";
 import { toolContractMetadata } from "./toolEffects.js";
 import { evidenceResultOf } from "./toolOutputSchemaPrimitives.js";
@@ -43,6 +46,11 @@ import {
   HARMONY_APPLICATION_GRAPH_EXAMPLE,
   MACOS_APPLICATION_GRAPH_EXAMPLE,
 } from "./mobileApplicationGraphExamples.js";
+
+/** Inline authenticated Evidence or same-session retained reference. */
+export const reverseArchitectureProjectionRequestSchema = z.strictObject({
+  application: evidenceInputSchema,
+});
 
 const traceOutputSchema = evidenceResultOf(applicationFeatureTraceResultSchema);
 const semanticTraceOutputSchema = evidenceResultOf(
@@ -317,6 +325,30 @@ export const APPLICATION_TOOL_CONTRACTS = [
       },
     ],
   },
+  {
+    name: "project_reverse_architecture",
+    ...toolContractMetadata("project_reverse_architecture"),
+    description:
+      "Project authenticated JavaScript, runtime-reconciled, or managed application graph Evidence into evidence-linked components, directed relationships, unverified architecture boundary hypotheses and unresolved findings. Accepts inline Evidence or a retained reference from this MCP session. Does not run the target or claim inferred boundaries as observed.",
+    kind: "application",
+    inputSchema: reverseArchitectureProjectionRequestSchema,
+    outputSchema: evidenceResultOf(architectureProjectionSchema),
+    examples: [
+      {
+        title:
+          "Reconstruct a hypothesis-aware architecture model from Evidence",
+        input: { application: JAVASCRIPT_FEATURE_TRACE_EXAMPLE.application },
+      },
+      {
+        title: "Use Evidence already retained in this MCP session",
+        input: {
+          application: retained(
+            JAVASCRIPT_FEATURE_TRACE_EXAMPLE.application.evidence_id,
+          ),
+        },
+      },
+    ],
+  },
 ] as const satisfies readonly ToolContract[];
 
 /** Resolve one named application contract without relying on array position. */
@@ -350,6 +382,9 @@ export function applicationToolContract(
 export function applicationToolContract(
   name: "project_harmony_application_graph",
 ): (typeof APPLICATION_TOOL_CONTRACTS)[9];
+export function applicationToolContract(
+  name: "project_reverse_architecture",
+): (typeof APPLICATION_TOOL_CONTRACTS)[10];
 export function applicationToolContract(
   name: (typeof APPLICATION_TOOL_CONTRACTS)[number]["name"],
 ): (typeof APPLICATION_TOOL_CONTRACTS)[number] {
