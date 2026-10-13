@@ -33,6 +33,7 @@ import { evidenceInputSchema } from "./evidenceInputContracts.js";
 import { architectureProjectionSchema } from "../domain/architecture/architectureProjectionSchema.js";
 import { architectureObservationSurfaceSchema } from "../domain/architecture/architectureObservationSurfaceSchema.js";
 import { architectureFederationSchema } from "../domain/architecture/architectureFederationSchema.js";
+import { architectureAtlasSchema } from "../domain/architecture/architectureAtlasSchema.js";
 import type { ToolContract } from "./toolContractTypes.js";
 import { toolContractMetadata } from "./toolEffects.js";
 import { evidenceResultOf } from "./toolOutputSchemaPrimitives.js";
@@ -58,6 +59,11 @@ export const reverseArchitectureProjectionRequestSchema = z.strictObject({
 export const observationArchitectureRequestSchema = z.strictObject({
   source_kind: z.enum(["native-trace", "packet-capture"]),
   evidence: evidenceInputSchema,
+});
+
+/** Bounded heterogeneous collection of inline or retained RAA Evidence. */
+export const reverseArchitectureAtlasRequestSchema = z.strictObject({
+  sources: z.array(evidenceInputSchema).min(2).max(8),
 });
 
 /** Exact inline Evidence or session-scoped references to distinct RAA projections. */
@@ -419,6 +425,24 @@ export const APPLICATION_TOOL_CONTRACTS = [
       },
     ],
   },
+  {
+    name: "build_reverse_architecture_atlas",
+    ...toolContractMetadata("build_reverse_architecture_atlas"),
+    description:
+      "Build a source-scoped, typed architectural atlas from 2–8 complete RAA application projections and native-trace/packet observation surfaces. Retains original facts, source coverage, native unresolved paths and packet field windows. Reports matching supplied artifact SHA-256 hashes without connecting, merging or reidentifying entities across domains. Source records must belong to at least two domains; accepts inline Evidence or exact same-session retained references. No target execution or network access.",
+    kind: "application",
+    inputSchema: reverseArchitectureAtlasRequestSchema,
+    outputSchema: evidenceResultOf(architectureAtlasSchema),
+    examples: [
+      {
+        title:
+          "Assemble an atlas from two previously retained architecture Evidence records",
+        input: {
+          sources: [retained(`ev_${HASH}`), retained(`ev_${"1".repeat(64)}`)],
+        },
+      },
+    ],
+  },
 ] as const satisfies readonly ToolContract[];
 
 /** Resolve one named application contract without relying on array position. */
@@ -461,6 +485,9 @@ export function applicationToolContract(
 export function applicationToolContract(
   name: "project_observation_architecture",
 ): (typeof APPLICATION_TOOL_CONTRACTS)[12];
+export function applicationToolContract(
+  name: "build_reverse_architecture_atlas",
+): (typeof APPLICATION_TOOL_CONTRACTS)[13];
 export function applicationToolContract(
   name: (typeof APPLICATION_TOOL_CONTRACTS)[number]["name"],
 ): (typeof APPLICATION_TOOL_CONTRACTS)[number] {

@@ -1,9 +1,9 @@
 > **RAA — Reverse Architect Anything (development fork)**
 > This repository is a fork of `morluto/rea`, evolving evidence-based reverse engineering toward reconstructing components, boundaries, responsibilities, contracts and architecture hypotheses. The original REA implementation remains credited and available under its MIT license. RAA is independent and is not an upstream REA release.
 >
-> **Working additions:** `project-reverse-architecture` reconstructs an application architecture model; `federate-reverse-architecture` combines 2–6 projections without merging source identities; and `project-observation-architecture` maps authenticated native UI traces or saved packet inspections to source-scoped architectural observation surfaces, preserving unknown dispatch and packet-window limitations. See `docs/reverse-architecting.md` and `docs/reverse-architecting-migration.md`. The CLI executable, npm package name, existing workflows and most documentation still use REA names until compatibility migration is verified. **Do not install the published `rea-agents` package expecting RAA features.**
+> **Working additions:** `project-reverse-architecture` derives application architecture; `project-observation-architecture` preserves native traces and saved packet fields; `federate-reverse-architecture` combines application projections; and `build-reverse-architecture-atlas` assembles a typed application/native/network atlas without inventing cross-source relationships. All output retains source Evidence identity and uncertainty. See `docs/reverse-architecting.md` and `docs/reverse-architecting-migration.md`. The CLI executable, npm package name, existing workflows and most documentation still use REA names until compatibility migration is verified. **Do not install the published `rea-agents` package expecting RAA features.**
 >
-> **Status:** experimental fork in active migration. The local CLI and MCP projection, federation, and `project_observation_architecture` capabilities are tested; there is no RAA npm release yet.
+> **Status:** experimental fork in active migration. The local CLI and MCP architecture projection, federation, observation surface, and heterogeneous atlas capabilities are tested; there is no RAA npm release yet.
 
 ---
 

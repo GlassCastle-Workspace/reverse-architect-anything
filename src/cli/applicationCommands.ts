@@ -2,6 +2,7 @@ import { reconstructionCoverageEvaluationInputSchema } from "../domain/reconstru
 import { reverseArchitectureProjectionInputSchema } from "../domain/architecture/architectureProjectionInput.js";
 import { observationArchitectureInputSchema } from "../domain/architecture/architectureObservationSurfaceInput.js";
 import { reverseArchitectureFederationInputSchema } from "../domain/architecture/architectureFederationInput.js";
+import { architectureAtlasInputSchema } from "../domain/architecture/architectureAtlasInput.js";
 import { Cli, z } from "incur";
 
 import { CLI_COMMANDS } from "../cliCommandNames.js";
@@ -29,6 +30,19 @@ export const registerApplicationCommands = (
   cli: ReturnType<typeof Cli.create>,
   logger: Logger,
 ): void => {
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.buildReverseArchitectureAtlas,
+    description:
+      "Build a heterogeneous architecture atlas from authenticated application, native and packet projection Evidence",
+    inputSchema: architectureAtlasInputSchema,
+    workflow: async (input) => {
+      const { buildReverseArchitectureAtlasEvidenceValidated } =
+        await import("../application/architecture/ArchitectureAtlasService.js");
+      return buildReverseArchitectureAtlasEvidenceValidated(input);
+    },
+  });
   registerJsonCommand({
     cli,
     logger,

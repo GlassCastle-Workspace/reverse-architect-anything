@@ -2,6 +2,7 @@ import type { EvidenceMcpServer } from "./EvidenceMcpServer.js";
 
 import { registerProjectReverseArchitectureTool } from "./registerApplicationTools/projectReverseArchitecture.js";
 import { registerProjectObservationArchitectureTool } from "./registerApplicationTools/projectObservationArchitecture.js";
+import { registerBuildReverseArchitectureAtlasTool } from "./registerApplicationTools/buildReverseArchitectureAtlas.js";
 import { registerFederateReverseArchitectureTool } from "./registerApplicationTools/federateReverseArchitecture.js";
 import { registerTraceFeatureTool } from "./registerApplicationTools/traceFeature.js";
 import { registerTraceJavaScriptSemanticsTool } from "./registerApplicationTools/traceSemantics.js";
@@ -20,6 +21,7 @@ export const registerApplicationTools = (
 ): void => {
   registerProjectReverseArchitectureTool(server, options);
   registerProjectObservationArchitectureTool(server, options);
+  registerBuildReverseArchitectureAtlasTool(server, options);
   registerFederateReverseArchitectureTool(server, options);
   registerTraceFeatureTool(server, options);
   registerTraceJavaScriptSemanticsTool(server, options);

@@ -137,6 +137,10 @@ const packetSurface = z.strictObject({
   }),
 });
 
+/** Public exact output branches for heterogeneous RAA consumers. */
+export const nativeArchitectureObservationSurfaceSchema = nativeSurface;
+export const packetArchitectureObservationSurfaceSchema = packetSurface;
+
 export const architectureObservationSurfaceSchema = z.discriminatedUnion(
   "source_kind",
   [nativeSurface, packetSurface],

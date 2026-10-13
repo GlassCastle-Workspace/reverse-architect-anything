@@ -563,6 +563,7 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
   }),
   project_reverse_architecture: evidence,
   project_observation_architecture: evidence,
+  build_reverse_architecture_atlas: evidence,
   federate_reverse_architecture: evidence,
   trace_application_feature: evidence,
   trace_javascript_semantics: evidence,

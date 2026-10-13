@@ -135,3 +135,40 @@ records are synthetic, not external provider execution.
 analysis in the projection, live capture, cross-family federation,
 evidence-based native-to-network binding, field-level temporality, or
 automated architecture reconstruction from unverified display names.
+
+## Phase 5: heterogeneous Architecture Atlas (2026-10-13)
+
+Implemented `build-reverse-architecture-atlas` (CLI) and
+`build_reverse_architecture_atlas` (MCP) for two to eight complete RAA
+architectural Evidence sources spanning at least two source domains
+(application, native trace, packet capture). The service requires a recognized
+RAA projection producer, authenticated record hash, exact source Evidence
+lineage, declared source type and version, consistent component/edge counts,
+and original-to-projected relationship identity consistency.
+
+The atlas assigns deterministic source-scoped IDs to application, native, and
+packet components without collapsing identifiers across source families.
+It exposes each source's coverage and limitations, preserves native incomplete
+dispatch and unknown endpoints, never invents packet relationships, and keeps
+application boundary proposals as hypotheses. Matching **reported** artifact
+SHA-256 values become informational digest groups only; the
+`cross_source_relationships` collection remains explicitly empty.
+
+**Resource bounds:** 2–8 source records, at most 20,000 nodes and 50,000
+relationships. Inputs are order-independent, and source records are recorded
+within the current MCP session using existing Evidence admission controls.
+
+**Verified:** 9/9 atlas domain tests; 4/4 Atlas Evidence service tests;
+3/3 atlas MCP tests including AJV schema, retained-session isolation and
+tampering; 3/3 compiled atlas CLI acceptance tests. One CLI acceptance
+case runs REA's real JavaScript analyzer on a local source fixture before
+combining its Evidence with synthetic native and packet projections. The combined legacy/new
+MCP and application CLI regression selection passed 56/56. Typechecking,
+linting, module boundaries, architecture guards, dead-export checking,
+formatting and duplicate-code checks passed in the local static CI gate.
+
+**Not claimed:** independently signed producer provenance, full provider
+integration, independently confirmed binary/packet equivalence, network
+session reconstruction, architecture design-intent recovery, or verified
+cross-domain relations. The Atlas's native and packet test data are synthetic.
+A typed independently sourced correspondence verifier is the next milestone.

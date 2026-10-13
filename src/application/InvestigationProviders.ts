@@ -116,6 +116,13 @@ export const RAA_FEDERATION_PROVIDER = Object.freeze({
   version: "1",
 } as const);
 
+/** Producer identity for heterogeneous RAA architecture atlases. */
+export const RAA_ATLAS_PROVIDER = Object.freeze({
+  id: "raa-architecture-atlas",
+  name: "RAA heterogeneous architecture atlas",
+  version: "1",
+} as const);
+
 /** Provider identity for graph-native feature tracing and version comparison. */
 export const JAVASCRIPT_APPLICATION_WORKFLOW_PROVIDER = {
   id: "rea-javascript-application-workflows",
