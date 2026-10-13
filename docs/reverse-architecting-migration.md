@@ -99,11 +99,39 @@ JavaScript source directories yielded 42 components, 60 relationships,
 3 shared reported content digests and no identical root digest; it created
 no unjustified cross-source edges.
 
-**Known limitations:** full raw native-investigation graphs, mobile graph
-inventories and network-capture/packet evidence still require typed adapters.
+**Known limitations:** the new native UI trace and saved TShark packet
+inspection adapters are separate source-scoped observation surfaces. Full raw
+native-investigation graphs, flow/session reconstruction, other capture formats
+and mobile graph inventories still require additional typed adapters.
 Even when input source kinds include static JavaScript, runtime-reconciled
 JavaScript and managed application projections, no cross-source identity
 merge is authorized by this slice. Process/trust boundaries remain hypotheses.
 C4 exports, state machines and architecture decision records are unimplemented.
 Publication, provider-level integration tests and the full repository-wide
 test suite remain separate release gates.
+
+## Phase 4: native/packet evidence adapters (2026-10-13)
+
+Implemented: `project-observation-architecture` (CLI) and
+`project_observation_architecture` (MCP) for two bounded and typed inputs:
+original `trace_native_ui_action` native trace Evidence and original
+`inspect_packet_capture` saved-capture Evidence.
+
+The domain owns source-scoped component and relationship transformations.
+The application layer authenticates Evidence digests, producer operation
+and identity, native target SHA-256, capture path/digest, and selected
+capture options. Both interfaces return identical derived Evidence
+envelopes. The MCP path only resolves exact same-session records.
+
+The network projection deliberately makes no flow/session claims.
+Native unresolved and partially covered call paths remain unknown.
+
+**Validated:** 6 pure domain tests, 6 service tests, 3 new MCP boundary tests,
+2 new compiled CLI acceptance tests, a combined 14/14 MCP regression suite,
+36/36 compiled application CLI acceptance tests, and local static CI. The fixture source
+records are synthetic, not external provider execution.
+
+**Not implemented:** direct full native graph ingestion, arbitrary pcap
+analysis in the projection, live capture, cross-family federation,
+evidence-based native-to-network binding, field-level temporality, or
+automated architecture reconstruction from unverified display names.

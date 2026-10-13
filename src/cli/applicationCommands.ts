@@ -1,5 +1,6 @@
 import { reconstructionCoverageEvaluationInputSchema } from "../domain/reconstructionCoverageInput.js";
 import { reverseArchitectureProjectionInputSchema } from "../domain/architecture/architectureProjectionInput.js";
+import { observationArchitectureInputSchema } from "../domain/architecture/architectureObservationSurfaceInput.js";
 import { reverseArchitectureFederationInputSchema } from "../domain/architecture/architectureFederationInput.js";
 import { Cli, z } from "incur";
 
@@ -28,6 +29,19 @@ export const registerApplicationCommands = (
   cli: ReturnType<typeof Cli.create>,
   logger: Logger,
 ): void => {
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.projectObservationArchitecture,
+    description:
+      "Interpret authenticated native trace or saved packet capture Evidence without inventing cross-domain links",
+    inputSchema: observationArchitectureInputSchema,
+    workflow: async (input) => {
+      const { projectObservationArchitectureEvidenceValidated } =
+        await import("../application/architecture/ArchitectureObservationSurfaceService.js");
+      return projectObservationArchitectureEvidenceValidated(input);
+    },
+  });
   registerJsonCommand({
     cli,
     logger,

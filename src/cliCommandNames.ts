@@ -129,6 +129,7 @@ export const CLI_COMMANDS = Object.freeze({
   reconcileJavaScriptRuntime: "reconcile-javascript-runtime",
   traceApplicationFeature: "trace-application-feature",
   projectReverseArchitecture: "project-reverse-architecture",
+  projectObservationArchitecture: "project-observation-architecture",
   federateReverseArchitecture: "federate-reverse-architecture",
   traceJavaScriptSemantics: "trace-javascript-semantics",
   compareApplicationVersions: "compare-application-versions",

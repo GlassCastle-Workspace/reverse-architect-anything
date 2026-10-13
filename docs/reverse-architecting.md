@@ -197,10 +197,11 @@ when source order is reversed, plus duplicate-source rejection.
 
 ## Next architectural capabilities (planned)
 
-1. **Heterogeneous evidence adapters:** extend the implemented projection
-   federation to native-investigation, browser/network-capture, mobile and other
-   format-specific graphs. An adapter must authenticate and interpret its native
-   source schema before its architectural claims may join the federation.
+1. **Cross-family federation:** connect the new native-trace and packet-frame
+   observation surfaces with existing application projections using separately
+   verified cross-domain bindings. Raw native graphs and broader network/mobile
+   formats require further adapters; no name, address or path match by itself
+   proves a shared entity.
 2. **Architectural contracts:** endpoints, data schemas, call shapes,
    invariants, side effects and dependency direction with coverage.
 3. **State and temporal systems:** state transitions, event flows, concurrency,
@@ -232,3 +233,74 @@ proof of architectural correctness.
 
 See [file migration plan](reverse-architecting-migration.md) and
 [upstream architectural rules](../AGENTS.md).
+
+## Phase 4: native and packet observation surfaces (2026-10-13)
+
+The additive `project-observation-architecture` CLI command and
+`project_observation_architecture` MCP tool accept precisely one
+authenticated source Evidence record and a discriminating `source_kind`.
+The returned hash-identified `raa.observation-architecture-surface` Evidence
+links the original producer's `evidence_id` without executing a target.
+
+Two source types have separate, explicitly typed outputs:
+
+**`native-trace`** — accepts existing REA `trace_native_ui_action`
+Evidence with its native investigation trace schema, composed workflow
+provider identity, and exact target artifact SHA-256. The projection
+retains original native entity IDs, distinct entities with identical names,
+native source coordinates, named edges and original resolution states
+(`observed`, `inferred`, `resolved`, `ambiguous`, `unresolved`).
+Unresolved indirect dispatch is not turned into a call target. When a
+bounded trace omits a relationship endpoint, its original ID is retained
+with a null projected endpoint and an explicit coverage limitation.
+This is not full static or dynamic control-flow recovery.
+
+**`packet-capture`** — accepts existing REA `inspect_packet_capture`
+Evidence, validates source path/digest and exactly reconciles the
+producer's selected fields, display filter, decode-as, limits and paging
+with the stored output. It retains the original frame numbers and
+ordered, potentially repeated field values. Its typed frame observations
+produce **zero asserted inter-frame relationships**: a TShark field
+window does not establish network flows, bidirectional conversations,
+application-layer transactions, users, hosts or executable provenance.
+The output reports matches, returned window, `has_more`, read scope,
+filters and pagination, so incomplete observations cannot imply absence.
+
+### CLI usage
+
+```sh
+# native-trace Evidence comes from an authorized REA trace_native_ui_action
+# packet-capture Evidence comes from an existing inspect_packet_capture result
+node -e 'const fs=require("node:fs"); fs.writeFileSync("observation-input.json", JSON.stringify({ source_kind:"packet-capture", evidence:JSON.parse(fs.readFileSync("source-evidence.json")) }));'
+node scripts/rea.mjs project-observation-architecture observation-input.json --format json > observation-evidence.json
+```
+
+MCP accepts the same inline request or
+`{"source_kind":"native-trace","evidence":{"kind":"retained-evidence","evidence_id":"ev_<64-hex>"}}`
+for source Evidence already retained **in that exact MCP session**.
+
+### Verification and boundaries
+
+- Six pure-domain tests passed for distinct native identities, missing
+  endpoint coverage, ambiguous dispatch, repeated network fields, pagination,
+  duplicate frame identity and empty filtered windows.
+- Six application service tests passed for deterministic content-linked
+  Evidence, producer-family authentication, forged/mismatched artifacts,
+  inconsistent packet selections and duplicate frame rejection.
+- Three MCP boundary tests passed for full JSON Schemas, inline/retained
+  identity parity, cross-session isolation, close-based reference expiry
+  and forged input rejection.
+- Two compiled CLI acceptance tests passed using **synthetic native and
+  packet Evidence fixtures**. Tests do not claim that Hopper, Ghidra,
+  TShark, Linux or a live device was run during this phase.
+- Static local CI (including module boundaries, typechecks and formatting)
+  passed after fixing an initial fixture-layer dependency violation.
+
+**Evidence trust boundary:** Semantic Evidence ID validation detects altered records; it is not a digital signature, hardware attestation, or independent proof that a claimed tool actually ran. Producer-specific operation checks cannot establish trustworthy provenance without separate authority evidence.
+
+**Current federation limit:** `federate_reverse_architecture` still
+accepts its own validated application architecture projections, not these
+two new observation-surface types. This prevents accidentally asserting
+cross-domain equivalence or undocumented trust boundaries. A future
+binding workflow must attach independently verifiable correspondence
+Evidence before native, application and network facts can be correlated.

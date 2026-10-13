@@ -31,6 +31,7 @@ import {
 import { z } from "zod";
 import { evidenceInputSchema } from "./evidenceInputContracts.js";
 import { architectureProjectionSchema } from "../domain/architecture/architectureProjectionSchema.js";
+import { architectureObservationSurfaceSchema } from "../domain/architecture/architectureObservationSurfaceSchema.js";
 import { architectureFederationSchema } from "../domain/architecture/architectureFederationSchema.js";
 import type { ToolContract } from "./toolContractTypes.js";
 import { toolContractMetadata } from "./toolEffects.js";
@@ -51,6 +52,12 @@ import {
 /** Inline authenticated Evidence or same-session retained reference. */
 export const reverseArchitectureProjectionRequestSchema = z.strictObject({
   application: evidenceInputSchema,
+});
+
+/** Accept a complete source record or exact same-session Evidence reference. */
+export const observationArchitectureRequestSchema = z.strictObject({
+  source_kind: z.enum(["native-trace", "packet-capture"]),
+  evidence: evidenceInputSchema,
 });
 
 /** Exact inline Evidence or session-scoped references to distinct RAA projections. */
@@ -387,6 +394,31 @@ export const APPLICATION_TOOL_CONTRACTS = [
       },
     ],
   },
+  {
+    name: "project_observation_architecture",
+    ...toolContractMetadata("project_observation_architecture"),
+    description:
+      "Derive a source-scoped architecture observation surface from authenticated REA trace_native_ui_action or inspect_packet_capture Evidence. Preserves native dispatch resolution, output windows and repeated packet fields without inventing flows, sessions or cross-provider identities. Accepts inline or exact same-session retained Evidence. Does not execute the target or read capture files.",
+    kind: "application",
+    inputSchema: observationArchitectureRequestSchema,
+    outputSchema: evidenceResultOf(architectureObservationSurfaceSchema),
+    examples: [
+      {
+        title: "Project a previously retained native investigation trace",
+        input: {
+          source_kind: "native-trace",
+          evidence: retained(`ev_${HASH}`),
+        },
+      },
+      {
+        title: "Project a previously retained saved packet inspection",
+        input: {
+          source_kind: "packet-capture",
+          evidence: retained(`ev_${"1".repeat(64)}`),
+        },
+      },
+    ],
+  },
 ] as const satisfies readonly ToolContract[];
 
 /** Resolve one named application contract without relying on array position. */
@@ -426,6 +458,9 @@ export function applicationToolContract(
 export function applicationToolContract(
   name: "federate_reverse_architecture",
 ): (typeof APPLICATION_TOOL_CONTRACTS)[11];
+export function applicationToolContract(
+  name: "project_observation_architecture",
+): (typeof APPLICATION_TOOL_CONTRACTS)[12];
 export function applicationToolContract(
   name: (typeof APPLICATION_TOOL_CONTRACTS)[number]["name"],
 ): (typeof APPLICATION_TOOL_CONTRACTS)[number] {

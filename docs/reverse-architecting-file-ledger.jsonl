@@ -52,7 +52,7 @@
 {"path":"CONTRIBUTING.md","base_sha":"a8d5f3635a73ef44e5024d153ddb467ac4635769","kind":"blob","phase":"09-project-and-dependencies","status":"pending","note":""}
 {"path":"DISCLAIMER.md","base_sha":"25157cc73c301e729c0ac897824976f300afa818","kind":"blob","phase":"09-project-and-dependencies","status":"pending","note":""}
 {"path":"LICENSE","base_sha":"2d476d24fa5a9ae2ab35e5fd121494049eb2ee5d","kind":"blob","phase":"09-project-and-dependencies","status":"pending","note":""}
-{"path":"README.md","base_sha":"2c30aa8efdce3f97f4752b11442749dd0a78dd24","kind":"blob","phase":"08-documentation","status":"modified-verified","note":"RAA fork notice lists tested federation tools; translation consistency passed."}
+{"path":"README.md","base_sha":"2c30aa8efdce3f97f4752b11442749dd0a78dd24","kind":"blob","phase":"08-documentation","status":"modified-verified","note":"Phase4 banner documents tested native and packet observation CLI/MCP without claiming universal federation"}
 {"path":"README_ar.md","base_sha":"51fc7ba6ed937df267aecdb68a4aa33d1f29de47","kind":"blob","phase":"08-documentation","status":"pending","note":""}
 {"path":"README_de.md","base_sha":"2917a798478a080520e58804788e3438dac41978","kind":"blob","phase":"08-documentation","status":"pending","note":""}
 {"path":"README_es.md","base_sha":"69823b0bfe8acb89d075d7a60b232ed907c7a4fb","kind":"blob","phase":"08-documentation","status":"pending","note":""}
@@ -155,9 +155,9 @@
 {"path":"docs/recorded-crashes.md","base_sha":"d68db74fd86801f2120ce89821199ff30dbd89dc","kind":"blob","phase":"08-documentation","status":"pending","note":""}
 {"path":"docs/releases/6.4.0.contributions.json","base_sha":"e5a5898a5a2531f011a68fcc056e5693a796e110","kind":"blob","phase":"08-documentation","status":"pending","note":""}
 {"path":"docs/releasing.md","base_sha":"37a28d532d2486deac7e1608c8d433c8ebf6939e","kind":"blob","phase":"08-documentation","status":"pending","note":""}
-{"path":"docs/reverse-architecting-file-ledger.jsonl","base_sha":null,"kind":"new","phase":"08-documentation","status":"new-verified","note":"Source-pinned ledger synced to 3162 entries with prior decisions retained"}
-{"path":"docs/reverse-architecting-migration.md","base_sha":null,"kind":"new","phase":"08-documentation","status":"new-verified","note":"Phase3 implementation and planned native and network adapters documented"}
-{"path":"docs/reverse-architecting.md","base_sha":null,"kind":"new","phase":"08-documentation","status":"new-verified","note":"Federation bounds epistemic caveats and measured two-source CLI smoke documented; docs check passed"}
+{"path":"docs/reverse-architecting-file-ledger.jsonl","base_sha":null,"kind":"new","phase":"08-documentation","status":"new-verified","note":"Pinned file ledger updated via sync and file-specific decisions; check validates SHA inventory"}
+{"path":"docs/reverse-architecting-migration.md","base_sha":null,"kind":"new","phase":"08-documentation","status":"new-verified","note":"Phase4 implementation, tests, and remaining integration limitations documented"}
+{"path":"docs/reverse-architecting.md","base_sha":null,"kind":"new","phase":"08-documentation","status":"new-verified","note":"Phase4 native and packet Evidence boundary documented with simulated-only provider tests"}
 {"path":"docs/roadmap.md","base_sha":"75d9f46797826356ac77ce0062b3b805d84000db","kind":"blob","phase":"08-documentation","status":"pending","note":""}
 {"path":"docs/sqlite-databases.md","base_sha":"3b8f40b01f893fa971b1cbae37f16be6c4028248","kind":"blob","phase":"08-documentation","status":"pending","note":""}
 {"path":"docs/testing.md","base_sha":"6f0b8013131fce364c045ed9920587e904db3c95","kind":"blob","phase":"08-documentation","status":"pending","note":""}
@@ -697,6 +697,8 @@
 {"path":"src/application/apple/AppleApplicationService.ts","base_sha":"a30cb654c0c72376c00806cb2fa413b59333348b","kind":"blob","phase":"03-workflows","status":"pending","note":""}
 {"path":"src/application/architecture/ArchitectureFederationService.test.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"3 service tests passed with static and runtime Evidence, order determinism and invalid sources."}
 {"path":"src/application/architecture/ArchitectureFederationService.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"Validates each derived Evidence and source linkage; produces immutable hash-linked federation Evidence; 3 tests passed."}
+{"path":"src/application/architecture/ArchitectureObservationSurfaceService.test.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"Six service tests passed covering valid provenance tampering mismatched producers and duplicates"}
+{"path":"src/application/architecture/ArchitectureObservationSurfaceService.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"Verifies semantic Evidence digest source operation artifact identity capture options and bounds; six service tests"}
 {"path":"src/application/architecture/ArchitectureProjectionService.test.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"3 service tests cover invalid inputs, deterministic provenance and tampered identity."}
 {"path":"src/application/architecture/ArchitectureProjectionService.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"Source family/root digest passed from authenticated graph adapter; service and MCP tests passed."}
 {"path":"src/application/artifacts/ArtifactExtractionDestination.ts","base_sha":"5b8934ff0790064cff2c4402532b9173249f5af2","kind":"blob","phase":"03-workflows","status":"pending","note":""}
@@ -1032,7 +1034,7 @@
 {"path":"src/cli/analysisViewCommands.ts","base_sha":"cbe63ab25ea9189005c7016735d6017a896bed78","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cli/androidCommands.ts","base_sha":"80a71b235181ad99a80434b935190b292815a145","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cli/apktoolCommands.ts","base_sha":"d7b30a61706e804acfd0194c475938d77378b6ec","kind":"blob","phase":"05-cli","status":"pending","note":""}
-{"path":"src/cli/applicationCommands.ts","base_sha":"75c63e09ee4b558d150a096095b9f54403a6f1b5","kind":"blob","phase":"05-cli","status":"modified-verified","note":"Federation CLI adapter produces Evidence envelope; real two-source CLI smoke passed."}
+{"path":"src/cli/applicationCommands.ts","base_sha":"75c63e09ee4b558d150a096095b9f54403a6f1b5","kind":"blob","phase":"05-cli","status":"modified-verified","note":"Observation architecture CLI registered; two compiled acceptance tests passed"}
 {"path":"src/cli/artifactCommands.ts","base_sha":"6b6b452e426177bddc71513f7b6927786d97a44e","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cli/binaryDiagnosticsCommands.ts","base_sha":"bddd16bed7b98124c309626f5f30ace8efc84b80","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cli/browserAdvancedCommands.ts","base_sha":"50c9ce44656f42aeac50883f11231cc6050f20f8","kind":"blob","phase":"05-cli","status":"pending","note":""}
@@ -1073,7 +1075,7 @@
 {"path":"src/cli/webSourceLocationCommands.ts","base_sha":"1025733abb9aaea5fe5ea08cb099f2dda4d38d08","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cliBrowserContext.ts","base_sha":"bd5169e6bc41a26a4552d235127f82bdd969fdbf","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cliBrowserScenarioCommands.ts","base_sha":"1a8785a664a95a78c212ee1b13d708157b689559","kind":"blob","phase":"05-cli","status":"pending","note":""}
-{"path":"src/cliCommandNames.ts","base_sha":"6f5b5e149987c68ed5a10f97998c329760347d23","kind":"blob","phase":"05-cli","status":"modified-verified","note":"Federation CLI command registered and exercised end-to-end with two real analyzed source scopes."}
+{"path":"src/cliCommandNames.ts","base_sha":"6f5b5e149987c68ed5a10f97998c329760347d23","kind":"blob","phase":"05-cli","status":"modified-verified","note":"Observation CLI name catalog updated; CLI execution passed"}
 {"path":"src/cliEvidenceCommands.ts","base_sha":"308a793ec3cc63cbb999731d8118d3d0feeb4cfa","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cliHostInputs.test.ts","base_sha":"4feebb910e9c0b147b78d5d3c3c5bb558da24ab6","kind":"blob","phase":"05-cli","status":"pending","note":""}
 {"path":"src/cliJavaScriptRuntimeCommands.ts","base_sha":"23ff1e40eab1bf6ab75f5d660a8f6b480f139cd5","kind":"blob","phase":"05-cli","status":"pending","note":""}
@@ -1131,7 +1133,7 @@
 {"path":"src/contracts/analysisViewToolContracts.ts","base_sha":"745009ebc1080ef06a7ed3473602e177a3d0b557","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/android/androidToolContracts.ts","base_sha":"df2cccf59fb5abc7483f915e3e2b23ba3e16277d","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/apktool/apktoolToolContracts.ts","base_sha":"efe8e14762e4e3516d18e84a9012d1b23a3c0781","kind":"blob","phase":"02-contracts","status":"pending","note":""}
-{"path":"src/contracts/applicationToolContracts.ts","base_sha":"9a592b53647ec70c9d40f85a28166b0cfcd0c174","kind":"blob","phase":"02-contracts","status":"modified-verified","note":"Typed federation MCP request/response and named contract added; AJV/MCP tests passed."}
+{"path":"src/contracts/applicationToolContracts.ts","base_sha":"9a592b53647ec70c9d40f85a28166b0cfcd0c174","kind":"blob","phase":"02-contracts","status":"modified-verified","note":"Typed input and output MCP contract; AJV and runtime boundary tests passed"}
 {"path":"src/contracts/artifactComparisonExample.ts","base_sha":"b0f4ac7678adb0d9239959eb21c53b68a3020abe","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/artifactToolContracts.ts","base_sha":"287b41214c0549f32b0b5968b8c1f0bb52eb137f","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/browserProviderToolContracts.ts","base_sha":"e6e674d45aaa06731258ebe887308eec7c1cdf6c","kind":"blob","phase":"02-contracts","status":"pending","note":""}
@@ -1188,7 +1190,7 @@
 {"path":"src/contracts/toolContractTypes.ts","base_sha":"0ba2ca321c925e0cf5376499d1821c596e02c657","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/toolContracts.ts","base_sha":"a2e0c0d7266b1741807e655881fe7cf46134e726","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/toolEffects.test.ts","base_sha":"836d190b19ef83c808cefa6c71d44ac1167b619a","kind":"blob","phase":"02-contracts","status":"pending","note":""}
-{"path":"src/contracts/toolEffects.ts","base_sha":"dde8adf188cec167e97794bd0a286f360525d0c8","kind":"blob","phase":"02-contracts","status":"modified-verified","note":"Federation effect limited to session Evidence; no target execution or network; MCP test checked."}
+{"path":"src/contracts/toolEffects.ts","base_sha":"dde8adf188cec167e97794bd0a286f360525d0c8","kind":"blob","phase":"02-contracts","status":"modified-verified","note":"Registered session-only analysis Evidence effect; MCP annotations test passed"}
 {"path":"src/contracts/toolInputReferences.test.ts","base_sha":"beb63b7e7ae9b4426196ab93096255bc91c49170","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/toolOutputReferences.test.ts","base_sha":"cda49f1d5e46f1261ceefda2706ba082e8b6c798","kind":"blob","phase":"02-contracts","status":"pending","note":""}
 {"path":"src/contracts/toolOutputSchemaGroups.ts","base_sha":"8487929e620e2ecaf9d879a56265809aabab58b2","kind":"blob","phase":"02-contracts","status":"pending","note":""}
@@ -1256,6 +1258,11 @@
 {"path":"src/domain/architecture/architectureFederation.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Deterministic source-scoped federation and digest matching; 5 domain tests and live CLI smoke passed."}
 {"path":"src/domain/architecture/architectureFederationInput.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Bounded 2-6 complete source Evidence admission with duplicate rejection; service tests passed."}
 {"path":"src/domain/architecture/architectureFederationSchema.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Typed federated Evidence result contract validated by AJV and MCP output tests."}
+{"path":"src/domain/architecture/architectureObservationSurface.fixture.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Synthetic native and packet producer fixtures with no upward domain dependency; module guards passed"}
+{"path":"src/domain/architecture/architectureObservationSurface.test.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Six domain invariants passed native identities unresolved dispatch packet window and duplicate frames"}
+{"path":"src/domain/architecture/architectureObservationSurface.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Six domain tests passed for native incomplete relationships and capture field window preservation"}
+{"path":"src/domain/architecture/architectureObservationSurfaceInput.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Strict source family and Evidence input boundary exercised by six service tests"}
+{"path":"src/domain/architecture/architectureObservationSurfaceSchema.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Typed native and packet output schema validated by MCP advertised JSON Schema tests"}
 {"path":"src/domain/architecture/architectureProjection.test.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Existing five tests retained and extended source identity assertions; passed."}
 {"path":"src/domain/architecture/architectureProjection.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Preserves source node identity, validated source kind and root SHA; domain and service regression tests passed."}
 {"path":"src/domain/architecture/architectureProjectionInput.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Strict authenticated Evidence input schema; TS and rejection smoke."}
@@ -2089,7 +2096,7 @@
 {"path":"src/server/registerAnalysisViewTool.ts","base_sha":"ebd204eddea93d7b4a6684ab9f2d5258a679b60a","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerAndroidTools.ts","base_sha":"722bd6695f8b4890c40d2a02bae5baf5312c119c","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApktoolTools.ts","base_sha":"b776a34af1b363543f9736794f6e3c61225a6868","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
-{"path":"src/server/registerApplicationTools.ts","base_sha":"61118d5d363cd2dccc7a3a7954557cbd3810438a","kind":"blob","phase":"04-composition-mcp","status":"modified-verified","note":"Federation registered via existing MCP application tooling; MCP tests and typecheck passed."}
+{"path":"src/server/registerApplicationTools.ts","base_sha":"61118d5d363cd2dccc7a3a7954557cbd3810438a","kind":"blob","phase":"04-composition-mcp","status":"modified-verified","note":"Production MCP registry includes bounded observation projection; in-memory MCP tests passed"}
 {"path":"src/server/registerApplicationTools/compareExportShapes.ts","base_sha":"7380402298b4e3b63cf648f049c7f65fed9e2dc7","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/compareSourceToBundle.ts","base_sha":"5ca65ee1dc8184e4615d4b00a793cae7edbb1bdd","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/compareVersions.ts","base_sha":"74927914068639f4da40d89bc54183641ab21d68","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
@@ -2098,6 +2105,7 @@
 {"path":"src/server/registerApplicationTools/helpers.ts","base_sha":"dd881887bd9b56a22b5371b691ef9ff15e57dd03","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/obligationLedger.ts","base_sha":"5899d1798de1de8f88a6f6d31918cdd7229ea4b2","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/projectMobileApplicationGraph.ts","base_sha":"195fcdd9f2b31332177fab81e48032bab0840c46","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
+{"path":"src/server/registerApplicationTools/projectObservationArchitecture.ts","base_sha":null,"kind":"new","phase":"04-composition-mcp","status":"new-verified","note":"Reuses same-session exact Evidence references admission and ledger recording; three MCP tests passed"}
 {"path":"src/server/registerApplicationTools/projectReverseArchitecture.ts","base_sha":null,"kind":"new","phase":"04-composition-mcp","status":"new-verified","note":"Uses existing admission, same-session lookup, source ledger and derived result recording; MCP tests passed."}
 {"path":"src/server/registerApplicationTools/traceFeature.ts","base_sha":"859a3795e417fbc248834922c3a6bb67f2da6ea7","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/traceSemantics.ts","base_sha":"7f907a27232ab9148d91baa7e00e333b7a45480c","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
@@ -2215,6 +2223,7 @@
 {"path":"tests/acceptance/applications/unboundRequires.test.ts","base_sha":"a9f66e1b1916f71db9346d7759a03def00f23d8b","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/applications/webpackRenamedExportsCli.test.ts","base_sha":"33a1bd56c48adcd7420e48120c74c92f383491df","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/architectureFederationCli.test.ts","base_sha":null,"kind":"new","phase":"07-tests","status":"new-verified","note":"Compiled public CLI acceptance verified order independent Evidence IDs and invalid-source rejection"}
+{"path":"tests/acceptance/architectureObservationCli.test.ts","base_sha":null,"kind":"new","phase":"07-tests","status":"new-verified","note":"Two compiled CLI acceptance tests passed native and capture output plus family impersonation rejection"}
 {"path":"tests/acceptance/artifactComparisonPlist.test.ts","base_sha":"3781eb6c7171bb0f8d77db2c42782b5b0f800a3b","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/artifactInventoryJvmClass.test.ts","base_sha":"408888ce71af641b88def1fc855ac4f78ed295b0","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/browser/browserScenarioCancellationCli.test.ts","base_sha":"7983ccda01af8f851d1766d854d5c20861467201","kind":"blob","phase":"07-tests","status":"pending","note":""}
@@ -2533,6 +2542,7 @@
 {"path":"tests/boundary/mcp/applicationEvidenceMcp.test.ts","base_sha":"16dfc142c23985819f0d000aab857f95695ee6e4","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/applicationExportShapeMcp.test.ts","base_sha":"179451390515134eaace58c8fcd6fef6372df419","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/applicationMutationPresenceMcp.test.ts","base_sha":"a2e8ad098c70e2c0b600df9a7b2937e7fdd6f336","kind":"blob","phase":"07-tests","status":"pending","note":""}
+{"path":"tests/boundary/mcp/architectureObservationMcp.test.ts","base_sha":null,"kind":"new","phase":"07-tests","status":"new-verified","note":"Three MCP tests passed on schemas inline parity session isolation source family mismatches"}
 {"path":"tests/boundary/mcp/artifactMcp.inlineInventory.test.ts","base_sha":"de78af9d08333bab126ed253e5fca6535c1cbb27","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/artifactMcp.test.ts","base_sha":"da8a586d208ad795f01540b28ec81d8de21b6411","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/asarUnpackedExtractionMcp.test.ts","base_sha":"fdb8436cee6896211987ecdacf44034f207f3cd0","kind":"blob","phase":"07-tests","status":"pending","note":""}
