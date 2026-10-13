@@ -4,6 +4,7 @@ import { observationArchitectureInputSchema } from "../domain/architecture/archi
 import { reverseArchitectureFederationInputSchema } from "../domain/architecture/architectureFederationInput.js";
 import { architectureAtlasInputSchema } from "../domain/architecture/architectureAtlasInput.js";
 import { architectureCorrespondenceReviewInputSchema } from "../domain/architecture/architectureCorrespondenceReviewInput.js";
+import { macOSSocketObservationInputSchema } from "../domain/architecture/macOSProcessSocketSnapshot.js";
 import { Cli, z } from "incur";
 
 import { CLI_COMMANDS } from "../cliCommandNames.js";
@@ -31,6 +32,19 @@ export const registerApplicationCommands = (
   cli: ReturnType<typeof Cli.create>,
   logger: Logger,
 ): void => {
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.observeMacOSProcessSockets,
+    description:
+      "Passively inspect TCP/UDP socket descriptors for one explicitly selected macOS PID with two bounded lsof readouts",
+    inputSchema: macOSSocketObservationInputSchema,
+    workflow: async (input) => {
+      const { observeMacOSProcessSockets } =
+        await import("../application/architecture/MacOSSocketObservationService.js");
+      return observeMacOSProcessSockets(input);
+    },
+  });
   registerJsonCommand({
     cli,
     logger,

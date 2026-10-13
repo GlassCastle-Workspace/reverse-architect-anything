@@ -457,3 +457,94 @@ source lineage, contradictory reports, different sensor scopes, and rejection
 of forged or unauthorized source envelopes. Local CLI/MCP tests validate
 the advertised schemas, deterministic replay, exact session reference
 resolution and that reviews never create confirmed atlas edges.
+
+## Phase 7: caller-scoped live macOS socket observations (2026-10-13)
+
+The `observe-macos-process-sockets` CLI command and
+`observe_macos_process_sockets` MCP tool collect a **passive, bounded OS
+report** of TCP/UDP descriptors belonging to **one explicit numeric PID**.
+This is the first RAA slice to read live process/socket state on the Mac mini
+rather than deriving claims solely from previously recorded application
+or packet Evidence.
+
+### Acquisition contract
+
+The producer executes only fixed system binaries, with fixed arguments plus
+the validated numeric PID, without a shell or arbitrary executable paths:
+
+- `/usr/sbin/sysctl -n kern.boottime` for a boot-time scope marker
+- `/bin/ps -p PID -o lstart=` before and after socket inspection
+- `/usr/sbin/lsof -nP -a -p PID -i -FpcfnPT` twice for the selected PID
+
+Each process is bounded to four seconds with a 256 KiB captured-output limit.
+Each readout admits at most 2,000 socket entries. The implementation
+refuses unsupported platforms, malformed/duplicate descriptors,
+unexpected PIDs, command diagnostics, changed boot identities, or changed
+process-start labels. Only `lsof` exit code 1 with **completely empty**
+stdout/stderr counts as a no-match readout; visibility is still partial.
+
+The process instance marker hashes the reported boot timestamp, PID and
+`ps lstart` label. The last field has **second-level precision** and is
+not globally collision-proof under rapid PID reuse, so the output explicitly
+records that limitation. Every socket observation is separately identified
+within the capture window: even a reused FD and identical endpoint in a
+subsequent capture receives a different observation identity.
+
+The two lsof readouts are compared by file descriptor, protocol, opaque
+OS-reported endpoint and TCP state. Entries are retained as:
+
+- `reported-in-both-readouts`
+- `first-readout-only`
+- `second-readout-only`
+
+A socket reported twice is **not** proven continuously open between reads.
+All counts and resulting time bounds are carried in the typed
+`RAAMacOSProcessSocketSnapshot`, with
+`completeness: "partial-point-in-time"` regardless of how many sockets
+were returned. No matching addresses, port numbers or file descriptors are
+interpreted as a process-to-packet, flow, user or architectural relationship.
+
+### Usage
+
+```sh
+# Select the PID deliberately; this inspects no other process.
+node scripts/rea.mjs observe-macos-process-sockets '{"pid":12345}' --format json > socket-evidence.json
+```
+
+The MCP operation `observe_macos_process_sockets` takes
+`{"pid":12345}` directly. Unlike existing RAA derived projections, it
+launches the OS's **fixed diagnostic utilities**, so its MCP effect contract
+advertises `launchesProcess: true`. It never launches/attaches to the
+selected target, escalates privileges, captures packet payloads, opens
+network connections or modifies process state.
+
+The result is a normalized Evidence record with
+`operation: "observe_macos_process_sockets"`,
+`predicate_type: "raa.macos-process-socket-readout"`, `observed`
+confidence and `external-service` authority. Here **observed** means
+"reported by the local operating-system utility at collection time", _not_
+independent cryptographic attestation or proof of actual packet transmission.
+The selected live PID is not an immutable artifact subject.
+
+### Verified on the Mac mini
+
+A controlled local Node.js TCP server bound to the IPv4 loopback interface
+was observed from its own PID. The fixed `lsof` selector returned the
+listener, and RAA preserved its protocol, endpoint, file descriptor, state
+and process identity. Compiled CLI and live MCP tests each exercised this
+source without broad process scans or root escalation.
+
+The initial `lsof -iTCP -iUDP` invocation returned exit code 1 even
+though it emitted a valid TCP descriptor, due to combined selector
+semantics. The corrected single `-i` selector exited successfully and
+retained the typed TCP observation. The regression tests cover this path,
+malformed/duplicate descriptors, PID or boot identity changes, empty
+readouts, OS diagnostics, unsafe PID strings, and cancellation.
+
+**Not claimed:** independent lsof binary attestation, an authenticated
+process or executable signing chain, continuous socket telemetry, payload
+recording, any packet timestamp correlation, namespace/NAT correlation or
+verified process-to-frame attribution. No data from this live producer is
+automatically promoted to a cross-domain architectural edge. That requires
+separate process/sensor/connection event provenance and disconfirmation
+experiments.

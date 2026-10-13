@@ -35,6 +35,10 @@ import { architectureObservationSurfaceSchema } from "../domain/architecture/arc
 import { architectureFederationSchema } from "../domain/architecture/architectureFederationSchema.js";
 import { architectureAtlasSchema } from "../domain/architecture/architectureAtlasSchema.js";
 import { architectureCorrespondenceReviewSchema } from "../domain/architecture/architectureCorrespondenceReviewSchema.js";
+import {
+  macOSSocketObservationInputSchema,
+  macOSProcessSocketSnapshotSchema,
+} from "../domain/architecture/macOSProcessSocketSnapshot.js";
 import type { ToolContract } from "./toolContractTypes.js";
 import { toolContractMetadata } from "./toolEffects.js";
 import { evidenceResultOf } from "./toolOutputSchemaPrimitives.js";
@@ -469,6 +473,21 @@ export const APPLICATION_TOOL_CONTRACTS = [
       },
     ],
   },
+  {
+    name: "observe_macos_process_sockets",
+    ...toolContractMetadata("observe_macos_process_sockets"),
+    description:
+      "Passively and synchronously inspect TCP/UDP socket descriptors of exactly one caller-selected numeric macOS PID using fixed built-in lsof, ps and sysctl binaries. Two readouts retain changing descriptors and reject changed process starts, reboot context and incomplete diagnostics. Launches OS inspection commands but never launches or attaches to the target, captures packets, escalates privilege or performs network I/O. Process-to-packet attribution remains unverified; addresses are OS-reported only.",
+    kind: "application",
+    inputSchema: macOSSocketObservationInputSchema,
+    outputSchema: evidenceResultOf(macOSProcessSocketSnapshotSchema),
+    examples: [
+      {
+        title: "Read sockets owned by a selected process ID",
+        input: { pid: 12345 },
+      },
+    ],
+  },
 ] as const satisfies readonly ToolContract[];
 
 /** Resolve one named application contract without relying on array position. */
@@ -517,6 +536,9 @@ export function applicationToolContract(
 export function applicationToolContract(
   name: "review_architecture_correspondences",
 ): (typeof APPLICATION_TOOL_CONTRACTS)[14];
+export function applicationToolContract(
+  name: "observe_macos_process_sockets",
+): (typeof APPLICATION_TOOL_CONTRACTS)[15];
 export function applicationToolContract(
   name: (typeof APPLICATION_TOOL_CONTRACTS)[number]["name"],
 ): (typeof APPLICATION_TOOL_CONTRACTS)[number] {

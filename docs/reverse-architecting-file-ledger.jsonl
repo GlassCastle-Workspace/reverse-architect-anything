@@ -707,6 +707,8 @@
 {"path":"src/application/architecture/ArchitectureObservationSurfaceService.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"Verifies semantic Evidence digest source operation artifact identity capture options and bounds; six service tests"}
 {"path":"src/application/architecture/ArchitectureProjectionService.test.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"3 service tests cover invalid inputs, deterministic provenance and tampered identity."}
 {"path":"src/application/architecture/ArchitectureProjectionService.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"Source family/root digest passed from authenticated graph adapter; service and MCP tests passed."}
+{"path":"src/application/architecture/MacOSSocketObservationService.test.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"pending","note":""}
+{"path":"src/application/architecture/MacOSSocketObservationService.ts","base_sha":null,"kind":"new","phase":"03-workflows","status":"new-verified","note":"Fixed macOS lsof ps sysctl diagnostic runner with bounds and fail closed identity validation; five service and real loopback tests"}
 {"path":"src/application/artifacts/ArtifactExtractionDestination.ts","base_sha":"5b8934ff0790064cff2c4402532b9173249f5af2","kind":"blob","phase":"03-workflows","status":"pending","note":""}
 {"path":"src/application/binary/AbortablePromise.ts","base_sha":"5069efda03921bb3af6cb45db2486462775f4783","kind":"blob","phase":"03-workflows","status":"pending","note":""}
 {"path":"src/application/binary/AnalysisClientCleanup.test.ts","base_sha":"3ca21b06ffde4ea2ddb6247aaf399136464d2f1a","kind":"blob","phase":"03-workflows","status":"pending","note":""}
@@ -1283,6 +1285,9 @@
 {"path":"src/domain/architecture/architectureProjection.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Preserves source node identity, validated source kind and root SHA; domain and service regression tests passed."}
 {"path":"src/domain/architecture/architectureProjectionInput.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Strict authenticated Evidence input schema; TS and rejection smoke."}
 {"path":"src/domain/architecture/architectureProjectionSchema.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Projection schema now includes original typed identity and provenance; MCP schema and typecheck passed."}
+{"path":"src/domain/architecture/macOSProcessSocketSnapshot.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Typed sampled socket Evidence model with explicit temporal and partial coverage; five domain tests plus live CLI and MCP conformance"}
+{"path":"src/domain/architecture/macOSSocketReadout.test.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Five domain tests passed for parsing count invariants PID confusion FD reuse and fluctuating sockets"}
+{"path":"src/domain/architecture/macOSSocketReadout.ts","base_sha":null,"kind":"new","phase":"01-domain","status":"new-verified","note":"Fixed PID lsof field parser, dual readout reconciliation, boot scoped identity; five unit tests and real macOS loopback passed"}
 {"path":"src/domain/artifactComparison.ts","base_sha":"e47b28a22eb1df200435222f7395aff1eed11591","kind":"blob","phase":"01-domain","status":"pending","note":""}
 {"path":"src/domain/artifactGraph.test.ts","base_sha":"5eee3aa93d94896f85734c75573ff24d582a81e3","kind":"blob","phase":"01-domain","status":"pending","note":""}
 {"path":"src/domain/artifactGraph.ts","base_sha":"6b2709baa4356eadf15326d93cd31cfbe84c1190","kind":"blob","phase":"01-domain","status":"pending","note":""}
@@ -2121,6 +2126,7 @@
 {"path":"src/server/registerApplicationTools/federateReverseArchitecture.ts","base_sha":null,"kind":"new","phase":"04-composition-mcp","status":"new-verified","note":"Native MCP admission and in-session Evidence lookup used; 3 MCP tests passed."}
 {"path":"src/server/registerApplicationTools/helpers.ts","base_sha":"dd881887bd9b56a22b5371b691ef9ff15e57dd03","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/obligationLedger.ts","base_sha":"5899d1798de1de8f88a6f6d31918cdd7229ea4b2","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
+{"path":"src/server/registerApplicationTools/observeMacOSProcessSockets.ts","base_sha":null,"kind":"new","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/projectMobileApplicationGraph.ts","base_sha":"195fcdd9f2b31332177fab81e48032bab0840c46","kind":"blob","phase":"04-composition-mcp","status":"pending","note":""}
 {"path":"src/server/registerApplicationTools/projectObservationArchitecture.ts","base_sha":null,"kind":"new","phase":"04-composition-mcp","status":"new-verified","note":"Reuses same-session exact Evidence references admission and ledger recording; three MCP tests passed"}
 {"path":"src/server/registerApplicationTools/projectReverseArchitecture.ts","base_sha":null,"kind":"new","phase":"04-composition-mcp","status":"new-verified","note":"Uses existing admission, same-session lookup, source ledger and derived result recording; MCP tests passed."}
@@ -2249,6 +2255,7 @@
 {"path":"tests/acceptance/browser/browserScenarioCancellationCli.test.ts","base_sha":"7983ccda01af8f851d1766d854d5c20861467201","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/flutterAnalysis.test.ts","base_sha":"457dce96bce15ce9612274d8683128ba4c2e65c2","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/goBinaryCli.test.ts","base_sha":"fd6cd648e86c6686a27235ae6c84fe5f4a736f5b","kind":"blob","phase":"07-tests","status":"pending","note":""}
+{"path":"tests/acceptance/macOSSocketObservationCli.test.ts","base_sha":null,"kind":"new","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/managedCliOutput.test.ts","base_sha":"26ef7b85d436b4e638a890e06b17c2bff85fb819","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/managedMemberPointers.test.ts","base_sha":"53fad7257338ddf6c97dd862aa74acf57400f66e","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/acceptance/managedMetadataExtraData.test.ts","base_sha":"6eb93c055412e7f27c0e3170a1a79b5cc887376a","kind":"blob","phase":"07-tests","status":"pending","note":""}
@@ -2619,6 +2626,7 @@
 {"path":"tests/boundary/mcp/keyedArchiveNumberMetadataMcp.test.ts","base_sha":"4a40a3064e0a53623143b75e1af2d17cb146b631","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/keyedArchivePrototypeKeyMcp.test.ts","base_sha":"b7803f0bdf4878cdbba373df3ae8b5973ca804e7","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/largeToolResult.test.ts","base_sha":"7453db0d0ead03d63da3566101d28f2467723139","kind":"blob","phase":"07-tests","status":"pending","note":""}
+{"path":"tests/boundary/mcp/macOSSocketObservationMcp.test.ts","base_sha":null,"kind":"new","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/mainErrors.test.ts","base_sha":"2a6ea0f42b838cc18fcdee6d90b12e6c82f76d3e","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/managedMcp.test.ts","base_sha":"d2e414a55e9358fdd4f537aa547329b38a5c6fca","kind":"blob","phase":"07-tests","status":"pending","note":""}
 {"path":"tests/boundary/mcp/mcpContractHarness.ts","base_sha":"035beb79ec2c18fda9fc346da98a297d12c64c3e","kind":"blob","phase":"07-tests","status":"pending","note":""}

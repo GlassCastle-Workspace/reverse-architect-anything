@@ -66,7 +66,9 @@ const authenticateAtlas = (
   const parsed = architectureAtlasSchema.safeParse(record.normalized_result);
   if (!parsed.success)
     return err(reject(null, "Atlas normalized result is malformed"));
-  const claimed = parsed.data.sources.map((s) => s.projection_evidence_id).sort();
+  const claimed = parsed.data.sources
+    .map((s) => s.projection_evidence_id)
+    .sort();
   const linked = [...record.evidence_links].sort();
   const parameterIds = record.parameters.source_evidence_ids;
   if (

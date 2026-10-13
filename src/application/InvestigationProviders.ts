@@ -130,6 +130,13 @@ export const RAA_CORRESPONDENCE_REVIEW_PROVIDER = Object.freeze({
   version: "1",
 } as const);
 
+/** Passive, caller-scoped macOS lsof/ps socket observation provider. */
+export const RAA_MACOS_SOCKET_PROVIDER = Object.freeze({
+  id: "raa-macos-socket-readout",
+  name: "RAA macOS passive process socket reader",
+  version: "1",
+} as const);
+
 /** Provider identity for graph-native feature tracing and version comparison. */
 export const JAVASCRIPT_APPLICATION_WORKFLOW_PROVIDER = {
   id: "rea-javascript-application-workflows",

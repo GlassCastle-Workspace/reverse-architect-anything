@@ -200,3 +200,35 @@ identity/causation claims are required release gates.
 observable process/socket/network provenance, with sensor-time and namespace
 coordination. Mere provider names, digest equality or an apparent IP/time
 overlap must never be sufficient to mark a relationship verified.
+
+## Phase 7: macOS process/socket observation (2026-10-13)
+
+Implemented a caller-scoped live `observe-macos-process-sockets` CLI
+command and `observe_macos_process_sockets` MCP tool. The operation takes
+**one strictly validated numeric PID** and samples only its Internet socket
+descriptors using fixed system `sysctl`, `ps` and `lsof` invocations.
+It does not use a shell, launch/attach to the target, enumerate the entire
+host, escalate privileges, establish external network connections, or
+capture packet data.
+
+The domain model is `RAAMacOSProcessSocketSnapshot`. It binds the
+reported PID to host boot time and second-resolution process-start label,
+and records the start/end capture window, TCP/UDP FD, address and TCP state
+as reported, two-readout intersection or fluctuation, bounded resource
+coverage and evidence limitations. Only snapshots with consistent before
+and after process/boot identity are accepted. No negative finding from a
+partial readout establishes absence of network activity.
+
+**Verified:** 5/5 parser and domain tests; 5/5 application service
+tests including changed PID, reboot, diagnostic, truncation and unsafe
+PID controls; 3/3 MCP boundary tests, including a live controlled loopback
+listener owned by the selected PID; 2/2 compiled CLI acceptance tests,
+including the same live selected-PID listener. All positives on macOS
+use the current test process, not another application or arbitrary network
+traffic. macOS-only positive tests are platform-gated in CI.
+
+**Known limitation:** this is OS-reported descriptor presence, not
+process-to-packet causation or independently attested socket ownership.
+The source is not yet admitted as a verified cross-domain correspondence
+producer. Full deployment, attestation, continuous socket monitoring,
+NAT/namespace/sensor alignment and packet correlation remain pending.
