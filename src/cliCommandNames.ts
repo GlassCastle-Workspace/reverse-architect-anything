@@ -133,6 +133,7 @@ export const CLI_COMMANDS = Object.freeze({
   buildReverseArchitectureAtlas: "build-reverse-architecture-atlas",
   reviewArchitectureCorrespondences: "review-architecture-correspondences",
   observeMacOSProcessSockets: "observe-macos-process-sockets",
+  assessSocketPacketCorrespondence: "assess-socket-packet-correspondence",
   federateReverseArchitecture: "federate-reverse-architecture",
   traceJavaScriptSemantics: "trace-javascript-semantics",
   compareApplicationVersions: "compare-application-versions",

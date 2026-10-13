@@ -5,6 +5,7 @@ import { registerProjectObservationArchitectureTool } from "./registerApplicatio
 import { registerBuildReverseArchitectureAtlasTool } from "./registerApplicationTools/buildReverseArchitectureAtlas.js";
 import { registerReviewArchitectureCorrespondencesTool } from "./registerApplicationTools/reviewArchitectureCorrespondences.js";
 import { registerObserveMacOSProcessSocketsTool } from "./registerApplicationTools/observeMacOSProcessSockets.js";
+import { registerAssessSocketPacketCorrespondenceTool } from "./registerApplicationTools/assessSocketPacketCorrespondence.js";
 import { registerFederateReverseArchitectureTool } from "./registerApplicationTools/federateReverseArchitecture.js";
 import { registerTraceFeatureTool } from "./registerApplicationTools/traceFeature.js";
 import { registerTraceJavaScriptSemanticsTool } from "./registerApplicationTools/traceSemantics.js";
@@ -26,6 +27,7 @@ export const registerApplicationTools = (
   registerBuildReverseArchitectureAtlasTool(server, options);
   registerReviewArchitectureCorrespondencesTool(server, options);
   registerObserveMacOSProcessSocketsTool(server, options);
+  registerAssessSocketPacketCorrespondenceTool(server, options);
   registerFederateReverseArchitectureTool(server, options);
   registerTraceFeatureTool(server, options);
   registerTraceJavaScriptSemanticsTool(server, options);

@@ -35,6 +35,8 @@ import { architectureObservationSurfaceSchema } from "../domain/architecture/arc
 import { architectureFederationSchema } from "../domain/architecture/architectureFederationSchema.js";
 import { architectureAtlasSchema } from "../domain/architecture/architectureAtlasSchema.js";
 import { architectureCorrespondenceReviewSchema } from "../domain/architecture/architectureCorrespondenceReviewSchema.js";
+import { socketPacketAssessmentSchema } from "../domain/architecture/socketPacketAssessmentSchema.js";
+import { prefixedDigestSchema } from "../domain/digests.js";
 import {
   macOSSocketObservationInputSchema,
   macOSProcessSocketSnapshotSchema,
@@ -91,6 +93,14 @@ export const reverseArchitectureFederationRequestSchema = z
 export const architectureCorrespondenceReviewRequestSchema = z.strictObject({
   atlas: evidenceInputSchema,
   reports: z.array(evidenceInputSchema).min(1).max(32),
+});
+
+/** Exact selected socket/frame identities from authenticated source Evidence. */
+export const socketPacketAssessmentRequestSchema = z.strictObject({
+  socket_evidence: evidenceInputSchema,
+  capture_evidence: evidenceInputSchema,
+  socket_observation_id: prefixedDigestSchema("raa_socketobs"),
+  frame_number: z.string().regex(/^[1-9][0-9]*$/u),
 });
 
 const traceOutputSchema = evidenceResultOf(applicationFeatureTraceResultSchema);
@@ -488,6 +498,27 @@ export const APPLICATION_TOOL_CONTRACTS = [
       },
     ],
   },
+  {
+    name: "assess_socket_packet_correspondence",
+    ...toolContractMetadata("assess_socket_packet_correspondence"),
+    description:
+      "Compare one exact macOS lsof socket observation with one REA saved-capture frame using their complete Evidence or exact same-session references. Classifies reported IPv4/IPv6 TCP/UDP tuple consistency and raw timestamp relation, while retaining PID/socket reuse, NAT, vantage, clock and partial-capture uncertainty. NEVER attests packet emission or links a process to a packet. Does not read files, launch tools or access the network.",
+    kind: "application",
+    inputSchema: socketPacketAssessmentRequestSchema,
+    outputSchema: evidenceResultOf(socketPacketAssessmentSchema),
+    examples: [
+      {
+        title:
+          "Compare retained socket and packet Evidence using exact selected identities",
+        input: {
+          socket_evidence: retained(`ev_${HASH}`),
+          capture_evidence: retained(`ev_${"1".repeat(64)}`),
+          socket_observation_id: `raa_socketobs_${HASH}`,
+          frame_number: "7",
+        },
+      },
+    ],
+  },
 ] as const satisfies readonly ToolContract[];
 
 /** Resolve one named application contract without relying on array position. */
@@ -539,6 +570,9 @@ export function applicationToolContract(
 export function applicationToolContract(
   name: "observe_macos_process_sockets",
 ): (typeof APPLICATION_TOOL_CONTRACTS)[15];
+export function applicationToolContract(
+  name: "assess_socket_packet_correspondence",
+): (typeof APPLICATION_TOOL_CONTRACTS)[16];
 export function applicationToolContract(
   name: (typeof APPLICATION_TOOL_CONTRACTS)[number]["name"],
 ): (typeof APPLICATION_TOOL_CONTRACTS)[number] {

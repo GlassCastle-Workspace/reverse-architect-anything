@@ -548,3 +548,100 @@ verified process-to-frame attribution. No data from this live producer is
 automatically promoted to a cross-domain architectural edge. That requires
 separate process/sensor/connection event provenance and disconfirmation
 experiments.
+
+## Phase 8: offline socket-to-packet correspondence assessment (2026-10-13)
+
+**Implemented**: `assess-socket-packet-correspondence` (CLI) and
+`assess_socket_packet_correspondence` (MCP). The tool compares **one
+explicitly selected, authenticated macOS lsof socket observation** to **one
+explicitly selected frame** of an authenticated REA saved packet-capture
+inspection. It is deliberately a _reported compatibility test_, not a
+verified process-to-packet attribution engine.
+
+### Bound input
+
+```json
+{
+  "socket_evidence": "<complete observe_macos_process_sockets Evidence>",
+  "capture_evidence": "<complete inspect_packet_capture Evidence>",
+  "socket_observation_id": "raa_socketobs_<64-lowercase-hex>",
+  "frame_number": "7"
+}
+```
+
+The CLI command accepts this request as an input JSON file using the existing
+`--format json` route. In MCP, each Evidence value can instead be an exact
+same-session `{"kind":"retained-evidence","evidence_id":"ev_<64-hex>"}`
+reference. The operation never launches the target process, reads another
+capture file, starts diagnostics, or accesses the network; it compares the
+two records already supplied or retained.
+
+**Source validation:** require the original RAA macOS socket Evidence producer,
+operation, predicate, observed/external-service confidence and authority;
+require the original selected PID to agree with the typed snapshot. Require
+REA `inspect_packet_capture` Evidence, a coherent artifact SHA-256/path,
+original query parameters exactly equal to the stored capture selection,
+and a packet window of at most 2,000 selected frames. Exact selected socket
+and frame IDs must resolve uniquely within those records.
+
+**Reported tuple parsing:** narrowly admit literal numeric IPv4 or bracketed
+IPv6 local/peer sockets and exactly one set of IP source/destination plus TCP
+or UDP source/destination ports. Preserve direction: outbound, inbound,
+different _reported_ tuple, or not comparable. Wildcards, hostnames, listening
+sockets, missing peer endpoints, repeated protocol fields, mixed encapsulation
+layers, IPv6 zone IDs and malformed ports remain **not comparable**, rather
+than accepting plausible mappings. A different reported tuple does not
+disprove historical process activity: NAT, capture placement, missing socket
+lifetimes and process reuse remain possible.
+
+**Time evaluation:** optionally compare one reported `frame.time_epoch` to
+the lsof dual-readout interval. Results are inside, before, after, or unknown.
+The epoch is reduced to millisecond resolution; neither system clock
+synchronization nor capture timestamp provenance is independently established.
+A frame outside the readout interval is a negative control for that **sample
+window**, not a negative finding about all process traffic.
+
+**Result:** a versioned `RAASocketPacketAssessment` within a derived Evidence
+record. It preserves source Evidence links, observed PID/start granularity,
+process-instance identifier, original socket FD and endpoint, readout stability,
+frame number and capture digest. It reports comparison/clock/vantage status,
+missing proof, and a nonempty explanation of alternative causes. The
+`attribution.independently_verified` field is **always false**,
+`attribution.verification` is **always `not-established`**, and
+`process_packet_relationships` is an empty typed collection.
+
+### Verification and negative controls
+
+Dedicated tests cover outbound/inbound compatibility, different selected
+tuple, listening socket, absent/duplicate frame identity, socket readout
+fluctuation, missing or repeated packet fields, time skew, a second PID and
+same tuple after descriptor reuse, IPv6 exact matching and mixed IPv4/IPv6
+encapsulation, and protocol mismatch. Service tests cover tampered source
+Evidence, mismatched query and artifact identity, PID mismatch, invalid
+caller-selected identifiers, and deterministic Evidence replay. MCP tests
+cover JSON Schema and same-session references/expiry; compiled CLI tests
+exercise output and input rejection.
+
+One macOS acceptance test reads an **actual live loopback listener**, then
+pairs that OS Evidence with a **synthetic saved-capture report**. It correctly
+refuses to claim the listener emitted a packet, proving the _negative
+attribution gate_, not a real packet-to-process correlation.
+
+### Remaining release gate
+
+A real independently corroborated packet-to-process attribution requires a
+trusted process/socket-event producer, PID- and FD-reuse-safe lifecycle
+identifiers, source-observed connection/namespace/interface identity,
+capture-vantage and NAT context, bounded synchronized timestamps and
+negative-control experiments. None of those additional capabilities is
+silently substituted by a matching displayed four-tuple.
+
+**Measured Phase 8 validation (2026-10-13):** 9/9 source-domain unit
+tests, 6/6 Evidence-service tests, 3/3 dedicated MCP boundary tests and
+3/3 compiled CLI acceptance tests passed. An expanded selected MCP/CLI
+regression run passed **73/73** across fifteen test files. The real macOS
+integration test observed a loopback listener owned by the test process,
+then paired it with a **synthetic** packet report. The resulting comparison
+correctly remained not comparable and did not attribute any packet to the
+listener. Static CI and documentation conformance are separate required
+checks.

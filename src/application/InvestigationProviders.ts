@@ -137,6 +137,13 @@ export const RAA_MACOS_SOCKET_PROVIDER = Object.freeze({
   version: "1",
 } as const);
 
+/** Reported socket/packet tuple comparison; never an attribution verifier. */
+export const RAA_SOCKET_PACKET_ASSESSMENT_PROVIDER = Object.freeze({
+  id: "raa-socket-packet-assessment",
+  name: "RAA offline socket/packet compatibility assessment",
+  version: "1",
+} as const);
+
 /** Provider identity for graph-native feature tracing and version comparison. */
 export const JAVASCRIPT_APPLICATION_WORKFLOW_PROVIDER = {
   id: "rea-javascript-application-workflows",

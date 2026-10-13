@@ -5,6 +5,7 @@ import { reverseArchitectureFederationInputSchema } from "../domain/architecture
 import { architectureAtlasInputSchema } from "../domain/architecture/architectureAtlasInput.js";
 import { architectureCorrespondenceReviewInputSchema } from "../domain/architecture/architectureCorrespondenceReviewInput.js";
 import { macOSSocketObservationInputSchema } from "../domain/architecture/macOSProcessSocketSnapshot.js";
+import { socketPacketAssessmentInputSchema } from "../domain/architecture/socketPacketAssessmentSchema.js";
 import { Cli, z } from "incur";
 
 import { CLI_COMMANDS } from "../cliCommandNames.js";
@@ -32,6 +33,19 @@ export const registerApplicationCommands = (
   cli: ReturnType<typeof Cli.create>,
   logger: Logger,
 ): void => {
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.assessSocketPacketCorrespondence,
+    description:
+      "Compare exact OS-reported socket and saved packet frame Evidence without asserting process attribution",
+    inputSchema: socketPacketAssessmentInputSchema,
+    workflow: async (input) => {
+      const { assessSocketPacketCorrespondenceValidated } =
+        await import("../application/architecture/SocketPacketAssessmentService.js");
+      return assessSocketPacketCorrespondenceValidated(input);
+    },
+  });
   registerJsonCommand({
     cli,
     logger,

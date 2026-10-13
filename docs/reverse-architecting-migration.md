@@ -232,3 +232,39 @@ process-to-packet causation or independently attested socket ownership.
 The source is not yet admitted as a verified cross-domain correspondence
 producer. Full deployment, attestation, continuous socket monitoring,
 NAT/namespace/sensor alignment and packet correlation remain pending.
+
+## Phase 8: bounded socket/packet compatibility assessment (2026-10-13)
+
+Implemented `assess-socket-packet-correspondence` (CLI) and
+`assess_socket_packet_correspondence` (MCP), consuming authenticated RAA
+macOS process/socket readout Evidence and REA saved-capture Evidence for
+**exactly one selected socket ID and frame number**.
+
+Output is source-linked, content-addressed `RAASocketPacketAssessment`
+Evidence containing protocol/IP/port tuple comparison, raw readout-relative
+time status, process-instance and socket observation IDs, source artifact
+identity and explicit lifecycle/vantage/clock limitations. Tuple equality
+and time proximity are **not verified attribution**.
+
+Negative controls: PID/socket reuse, same tuple with distinct process
+instances, first-readout-only sockets, listening sockets, incomplete and
+nested fields, absent frame timestamp, raw time separation, IPv6 variants,
+protocol mismatch and source Evidence forgery. One compiled CLI acceptance
+test combines a real OS loopback listener readout with a **synthetic** saved
+packet report; the assessment correctly refuses to claim packet emission.
+
+The tool is offline; it launches no commands and reads no files beyond
+already supplied Evidence. Real packet-capture acquisition and a live,
+independently corroborated process-to-packet linkage remain **unverified**
+and are not release claims.
+
+**Acceptance gate:** domain/service tests, compiled CLI/MCP parity, session
+reference isolation, static TypeScript and architecture guards, source
+provenance, source boundedness and prior REA compatibility regression.
+
+**Phase 8 verification record:** 9/9 domain, 6/6 service, 3/3 MCP,
+3/3 CLI acceptance; 73/73 expanded selected MCP/CLI regression tests.
+An actual macOS loopback descriptor was inspected through Phase 7 and
+compared against synthetic packet Evidence. There was **no live packet
+capture** and no observed packet-to-process emission event. Full repository
+test coverage and remote CI are not implied by these selected checks.

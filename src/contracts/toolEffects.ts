@@ -565,6 +565,7 @@ export const TOOL_EFFECTS: Readonly<Record<string, ToolEffects>> = {
   project_observation_architecture: evidence,
   build_reverse_architecture_atlas: evidence,
   review_architecture_correspondences: evidence,
+  assess_socket_packet_correspondence: evidence,
   observe_macos_process_sockets: effects({
     mutatesSession: true,
     launchesProcess: true,
