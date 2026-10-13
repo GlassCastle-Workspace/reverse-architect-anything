@@ -3,6 +3,7 @@ import { reverseArchitectureProjectionInputSchema } from "../domain/architecture
 import { observationArchitectureInputSchema } from "../domain/architecture/architectureObservationSurfaceInput.js";
 import { reverseArchitectureFederationInputSchema } from "../domain/architecture/architectureFederationInput.js";
 import { architectureAtlasInputSchema } from "../domain/architecture/architectureAtlasInput.js";
+import { architectureCorrespondenceReviewInputSchema } from "../domain/architecture/architectureCorrespondenceReviewInput.js";
 import { Cli, z } from "incur";
 
 import { CLI_COMMANDS } from "../cliCommandNames.js";
@@ -30,6 +31,19 @@ export const registerApplicationCommands = (
   cli: ReturnType<typeof Cli.create>,
   logger: Logger,
 ): void => {
+  registerJsonCommand({
+    cli,
+    logger,
+    name: CLI_COMMANDS.reviewArchitectureCorrespondences,
+    description:
+      "Review reported cross-domain correspondences without promoting them to verified relationships",
+    inputSchema: architectureCorrespondenceReviewInputSchema,
+    workflow: async (input) => {
+      const { reviewReverseArchitectureCorrespondenceEvidenceValidated } =
+        await import("../application/architecture/ArchitectureCorrespondenceReviewService.js");
+      return reviewReverseArchitectureCorrespondenceEvidenceValidated(input);
+    },
+  });
   registerJsonCommand({
     cli,
     logger,

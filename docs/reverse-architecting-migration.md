@@ -172,3 +172,31 @@ integration, independently confirmed binary/packet equivalence, network
 session reconstruction, architecture design-intent recovery, or verified
 cross-domain relations. The Atlas's native and packet test data are synthetic.
 A typed independently sourced correspondence verifier is the next milestone.
+
+## Phase 6: cross-domain report review and admissibility (2026-10-13)
+
+Implemented `review-architecture-correspondences` CLI and
+`review_architecture_correspondences` MCP. The operation reviews separately
+submitted, content-addressed analyst reports about explicit pairs of
+atlas nodes. It enforces exact atlas/node/source identities, report operation
+and source lineage, allowable directed relation kinds, scope/date validation,
+and independent report identifiers. The result groups matching scopes,
+preserves supporting and challenging Evidence IDs, records disconfirmation
+questions and missing verification requirements, and distinguishes
+`reported-unverified`, `contested`, and `challenge-only`.
+
+The output never populates verified cross-source relationships. The input
+`report_architecture_correspondence` is an externally authored Evidence
+record, not a built-in instrumented producer. Semantic hash validation is
+not attestation; no real process/socket observer, signed verifier, or native
+instrumentation has been implemented by this phase.
+
+Validation includes pure-domain, application-service, in-memory MCP and
+compiled CLI tests with synthetic reports; retained Evidence expiry,
+tampering/lineage rejections, report-order independence and lack of false
+identity/causation claims are required release gates.
+
+**Next:** independently authenticated or constrained producer adapters and
+observable process/socket/network provenance, with sensor-time and namespace
+coordination. Mere provider names, digest equality or an apparent IP/time
+overlap must never be sufficient to mark a relationship verified.

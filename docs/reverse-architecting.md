@@ -372,3 +372,88 @@ cross-domain edges.
 binding contract with independent evidence IDs, scope (target/sensor/time),
 reported authority, competing explanations, and validation results. Until
 then, every atlas source remains a disjoint subgraph.
+
+## Phase 6: Scoped correspondence reports and falsifiable review (2026-10-13)
+
+A new `review-architecture-correspondences` CLI command and
+`review_architecture_correspondences` MCP operation review **1–32**
+separately authored report Evidence records against one complete
+`build_reverse_architecture_atlas` Evidence record. This phase does **not**
+promote the reports into verified cross-source relationships.
+
+### Source requirements
+
+- The atlas must have the exact RAA Atlas producer identity, operation,
+  version, authority, semantic Evidence digest, and consistent source Evidence
+  lineage. There is no re-creation of a graph from anonymous JSON.
+- Each report must have `report_architecture_correspondence`,
+  `raa.cross-domain-correspondence-report`, inferred/analyst authority,
+  a typed `RAACorrespondenceReport` normalized result, a content-addressed
+  Evidence identity, and exact links to the atlas and both referenced source
+  projection Evidence IDs. Invalid references or mismatched parameters fail.
+- Atlas node IDs, original projection ownership, permitted direction, and
+  differing domains are checked. The only admitted report relation kinds are
+  `application-loads-native`, `native-emits-packet`, and
+  `application-emits-packet`.
+- Each report carries a precisely scoped subject SHA-256 (or explicit null),
+  process instance, namespace, connection/socket instance, sensor, start/end
+  timestamp pair, rationale and report polarity. A supplied subject SHA-256
+  must match the reported digest of at least one of the two original atlas
+  sources; this remains a reported digest, not an independent byte rehash.
+- Only reports with **identical** directional endpoints, relationship kind,
+  and observation scope are grouped together. Supporting and challenging
+  reports produce a `contested` review status; a challenge alone is
+  `challenge-only`; otherwise a claim is `reported-unverified`.
+  Different sensor scopes or time windows are _not silently merged_.
+- Each claim includes missing source-validation requirements and a
+  disconfirmation question. A process-to-packet report without a
+  namespace, reuse-safe process instance identity, socket/connection identity,
+  sensor/vantage or observation window remains visibly incomplete.
+- Exact input reordering does not change the derived Evidence ID.
+  Same-session MCP Evidence references expire on session close.
+  The tool does not load binaries, launch processes, inspect packet files,
+  access external networks or mutate an atlas.
+
+### Input and output
+
+```sh
+# atlas.json: full derived RAA Atlas Evidence
+# reports.json: array of full reported correspondence Evidence envelopes
+node -e 'const fs=require("node:fs"); const atlas=JSON.parse(fs.readFileSync("atlas.json")); const reports=JSON.parse(fs.readFileSync("reports.json")); fs.writeFileSync("correspondence-request.json",JSON.stringify({atlas,reports}));'
+node scripts/rea.mjs review-architecture-correspondences correspondence-request.json --format json > review-evidence.json
+```
+
+In MCP, `atlas` and each `reports[]` element may instead be an exact
+`{"kind":"retained-evidence","evidence_id":"ev_<64-hex>"}` reference in
+the same investigation session. The result is an RAA-derived Evidence
+envelope containing a typed `RAACorrespondenceReview` in its
+`normalized_result`, source IDs in `evidence_links` and explicit
+`no-independent-verification` for every reviewed claim.
+`verified_cross_source_relationships` is always empty in this release.
+
+### Provenance and epistemic boundary
+
+**A report is not proof that an underlying observation occurred.** Current
+REA Evidence digests establish record-content integrity but not the
+reporter's identity, instrument authorization or actual runtime behavior.
+Two reporters agreeing does not authenticate either one. The review
+therefore never marks reports `verified`, even when they agree or include
+apparently complete scope fields.
+
+Actual verification requires a separately developed and tested trusted
+producer and admissibility contract. For example, process→network attribution
+would need process-instance identity protected against PID reuse, socket or
+connection ownership telemetry, network namespace and NAT context, capture
+vantage, timestamp alignment and bounded observation coverage, followed by
+tests designed to disconfirm attribution. This phase creates the typed
+review/inquiry boundary without pretending that instrumentation already exists.
+
+### Validation
+
+The initial suite uses synthetic, explicitly analyst-authored report Evidence
+records. It exercises invalid directions, absent nodes, unrelated artifact
+digests, malformed time windows, duplicated report identities, inconsistent
+source lineage, contradictory reports, different sensor scopes, and rejection
+of forged or unauthorized source envelopes. Local CLI/MCP tests validate
+the advertised schemas, deterministic replay, exact session reference
+resolution and that reviews never create confirmed atlas edges.

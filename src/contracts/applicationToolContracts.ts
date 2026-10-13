@@ -34,6 +34,7 @@ import { architectureProjectionSchema } from "../domain/architecture/architectur
 import { architectureObservationSurfaceSchema } from "../domain/architecture/architectureObservationSurfaceSchema.js";
 import { architectureFederationSchema } from "../domain/architecture/architectureFederationSchema.js";
 import { architectureAtlasSchema } from "../domain/architecture/architectureAtlasSchema.js";
+import { architectureCorrespondenceReviewSchema } from "../domain/architecture/architectureCorrespondenceReviewSchema.js";
 import type { ToolContract } from "./toolContractTypes.js";
 import { toolContractMetadata } from "./toolEffects.js";
 import { evidenceResultOf } from "./toolOutputSchemaPrimitives.js";
@@ -81,6 +82,12 @@ export const reverseArchitectureFederationRequestSchema = z
       });
     }
   });
+
+/** Inline or exact same-session Atlas plus separately reported claim Evidence. */
+export const architectureCorrespondenceReviewRequestSchema = z.strictObject({
+  atlas: evidenceInputSchema,
+  reports: z.array(evidenceInputSchema).min(1).max(32),
+});
 
 const traceOutputSchema = evidenceResultOf(applicationFeatureTraceResultSchema);
 const semanticTraceOutputSchema = evidenceResultOf(
@@ -443,6 +450,25 @@ export const APPLICATION_TOOL_CONTRACTS = [
       },
     ],
   },
+  {
+    name: "review_architecture_correspondences",
+    ...toolContractMetadata("review_architecture_correspondences"),
+    description:
+      "Structurally review separately reported cross-domain correspondence claims against a validated RAA Atlas, preserving scoped node identities, conflicting reports, disconfirmation questions and missing verification criteria. Reports remain unverified even with semantic Evidence digests. Never assert a cross-source relationship, invoke a provider, or accept arbitrary names, IP matches or timestamps as proof. Atlas and reports may be inline or exact same-session retained Evidence.",
+    kind: "application",
+    inputSchema: architectureCorrespondenceReviewRequestSchema,
+    outputSchema: evidenceResultOf(architectureCorrespondenceReviewSchema),
+    examples: [
+      {
+        title:
+          "Review independently reported candidate relationships already retained in session",
+        input: {
+          atlas: retained(`ev_${HASH}`),
+          reports: [retained(`ev_${"1".repeat(64)}`)],
+        },
+      },
+    ],
+  },
 ] as const satisfies readonly ToolContract[];
 
 /** Resolve one named application contract without relying on array position. */
@@ -488,6 +514,9 @@ export function applicationToolContract(
 export function applicationToolContract(
   name: "build_reverse_architecture_atlas",
 ): (typeof APPLICATION_TOOL_CONTRACTS)[13];
+export function applicationToolContract(
+  name: "review_architecture_correspondences",
+): (typeof APPLICATION_TOOL_CONTRACTS)[14];
 export function applicationToolContract(
   name: (typeof APPLICATION_TOOL_CONTRACTS)[number]["name"],
 ): (typeof APPLICATION_TOOL_CONTRACTS)[number] {

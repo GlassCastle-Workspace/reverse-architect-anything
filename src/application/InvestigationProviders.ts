@@ -123,6 +123,13 @@ export const RAA_ATLAS_PROVIDER = Object.freeze({
   version: "1",
 } as const);
 
+/** A report review is a catalog of claims, never a verified runtime observation. */
+export const RAA_CORRESPONDENCE_REVIEW_PROVIDER = Object.freeze({
+  id: "raa-correspondence-review",
+  name: "RAA cross-domain correspondence report review",
+  version: "1",
+} as const);
+
 /** Provider identity for graph-native feature tracing and version comparison. */
 export const JAVASCRIPT_APPLICATION_WORKFLOW_PROVIDER = {
   id: "rea-javascript-application-workflows",
